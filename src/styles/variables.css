@@ -1,0 +1,29 @@
+:root {
+  /* ── Colors ── */
+  --bg:        #03000f;
+  --bg2:       #07010f;
+  --bg3:       #0d0520;
+
+  --cyan:      #00e5ff;
+  --purple:    #a259ff;
+  --pink:      #f72585;
+  --white:     #eef2ff;
+  --muted:     #68748e;
+  --faint:     #1e2540;
+
+  /* ── Gradients ── */
+  --grad-main: linear-gradient(125deg, #00e5ff, #a259ff, #f72585);
+  --grad-text: linear-gradient(125deg, #00e5ff 0%, #a259ff 50%, #f72585 100%);
+
+  /* ── Borders ── */
+  --border:    rgba(162, 89, 255, 0.12);
+  --border-h:  rgba(162, 89, 255, 0.35);
+
+  /* ── Fonts ── */
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ── Transitions ── */
+  --ease:      cubic-bezier(0.16, 1, 0.3, 1);
+}
