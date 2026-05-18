@@ -43,7 +43,7 @@
 
 .footer-made {
   font: 0.72rem/1 var(--font-mono);
-  color: var(--faint);
+  color: var(--muted); 
   margin-top: 0.4rem;
   letter-spacing: 0.04em;
 }

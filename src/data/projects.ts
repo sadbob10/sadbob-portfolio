@@ -64,6 +64,17 @@ export const PROJECTS: Project[] = [
     featured:    true,
     nda:         false,
   },
+  {
+    id:          'symptoai',
+    title:       'SymptoAI',
+    description: 'AI-powered healthcare ecosystem — disease prediction from symptoms, doctor appointment booking, telemedicine, medical records, and an AI health assistant. Built for Android & iOS.',
+    tech:        ['React Native', 'TypeScript', 'Node.js', 'PostgreSQL', 'AI/ML', 'NestJS'],
+    type:        'Personal',
+    emoji:       '🏥',
+    github:      'https://github.com/sadbob10',
+    featured:    true,
+    nda:         false,
+  },
 ]
 
 export const PROJECT_FILTERS = ['All', 'Enterprise', 'Personal'] as const
