@@ -1,0 +1,64 @@
+/* ── FLOATING CTA ── */
+.float-cta {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: 9990;
+  opacity: 0;
+  transition: all 0.5s var(--ease);
+  pointer-events: none;
+}
+
+.float-cta.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: all;
+}
+
+.float-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(3, 0, 15, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(162, 89, 255, 0.35);
+  color: var(--white);
+  padding: 0.75rem 1.6rem;
+  border-radius: 100px;
+  font: 600 0.88rem/1 var(--font-body);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.float-cta-btn:hover {
+  background: rgba(162, 89, 255, 0.15);
+  border-color: rgba(162, 89, 255, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(162, 89, 255, 0.2);
+}
+
+.float-cta-dot {
+  width: 7px;
+  height: 7px;
+  background: #5edf7e;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: floatDotPulse 2s infinite;
+}
+
+@keyframes floatDotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(94, 223, 126, 0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(94, 223, 126, 0); }
+}
+
+.float-cta-arrow {
+  transition: transform 0.2s;
+}
+.float-cta-btn:hover .float-cta-arrow {
+  transform: translateX(3px);
+}

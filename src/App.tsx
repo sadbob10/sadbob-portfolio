@@ -9,24 +9,21 @@ import Contact       from './components/sections/Contact'
 import RevealSection from './components/ui/RevealSection'
 import CustomCursor  from './components/ui/CustomCursor'
 import Preloader     from './components/ui/Preloader'
+import FloatingCTA   from './components/ui/FloatingCTA'
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true)
-
   const handleDone = useCallback(() => setLoading(false), [])
 
   return (
     <>
-      {/* Custom cursor — always rendered */}
       <CustomCursor />
+      <FloatingCTA />
 
-      {/* Preloader */}
       {loading && <Preloader onDone={handleDone} />}
 
-      {/* Portfolio — rendered beneath preloader */}
       <main style={{ visibility: loading ? 'hidden' : 'visible' }}>
         <Navbar />
-
         <Hero />
 
         <RevealSection direction="up">
