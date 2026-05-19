@@ -1,0 +1,67 @@
+/* Hide default cursor on desktop */
+@media (hover: hover) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* ── DOT ── */
+.cursor-dot {
+  position: fixed;
+  top:  -4px;
+  left: -4px;
+  width:  8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity .3s, transform .08s, width .25s, height .25s, background .25s;
+  will-change: transform;
+}
+.cursor-dot.visible  { opacity: 1; }
+.cursor-dot.hovered  { width: 12px; height: 12px; background: var(--cyan); top: -6px; left: -6px; }
+.cursor-dot.clicked  { transform: scale(0.5) !important; }
+
+/* ── RING ── */
+.cursor-ring {
+  position: fixed;
+  top:  -20px;
+  left: -20px;
+  width:  40px;
+  height: 40px;
+  border: 1.5px solid rgba(162,89,255,0.7);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0;
+  transition:
+    opacity .3s,
+    width .35s var(--ease),
+    height .35s var(--ease),
+    border-color .25s,
+    top .35s var(--ease),
+    left .35s var(--ease);
+  will-change: transform;
+}
+.cursor-ring.visible { opacity: 1; }
+.cursor-ring.hovered {
+  width:  64px;
+  height: 64px;
+  top:  -32px;
+  left: -32px;
+  border-color: rgba(0,229,255,0.5);
+  background: rgba(0,229,255,0.04);
+}
+.cursor-ring.clicked {
+  width:  28px;
+  height: 28px;
+  top:  -14px;
+  left: -14px;
+  border-color: var(--pink);
+}
+
+/* Mobile: restore default cursor */
+@media (hover: none) {
+  *, *::before, *::after { cursor: auto !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+}

@@ -1,0 +1,105 @@
+/* ── PRELOADER ── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+/* ── SPLIT PANELS ── */
+.pre-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--bg);
+  z-index: 2;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.pre-panel-top    { top: 0; transform-origin: top; }
+.pre-panel-bottom { bottom: 0; transform-origin: bottom; }
+
+.preloader.leaving .pre-panel-top    { transform: translateY(-100%); }
+.preloader.leaving .pre-panel-bottom { transform: translateY(100%);  }
+
+/* ── CENTER CONTENT ── */
+.pre-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.preloader.leaving .pre-content {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+/* ── LOGO ── */
+.pre-logo {
+  font-family: var(--font-head);
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  animation: preLogoIn 0.7s var(--ease) both;
+}
+.pre-sad { color: var(--white); }
+.pre-bob { color: var(--cyan);  }
+.pre-dot { color: var(--pink);  }
+
+@keyframes preLogoIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── COUNTER ── */
+.pre-counter {
+  font: 700 4rem/1 var(--font-mono);
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  min-width: 3ch;
+  text-align: center;
+  animation: preLogoIn 0.7s var(--ease) 0.2s both;
+}
+
+/* ── PROGRESS BAR ── */
+.pre-bar-bg {
+  width: clamp(200px, 40vw, 380px);
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: preLogoIn 0.5s var(--ease) 0.3s both;
+}
+.pre-bar-fill {
+  height: 100%;
+  background: var(--grad-main);
+  border-radius: 10px;
+  transition: width 0.12s linear;
+  box-shadow: 0 0 12px rgba(0,229,255,0.4);
+}
+
+/* ── LOADING TEXT ── */
+.pre-text {
+  font: 0.72rem/1 var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  animation: preLogoIn 0.5s var(--ease) 0.4s both;
+}
+
+/* Glitch flicker on logo */
+@keyframes glitch {
+  0%, 95%, 100% { clip-path: none; transform: none; }
+  96%  { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); transform: translateX(-3px); }
+  97%  { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translateX(3px);  }
+  98%  { clip-path: none; transform: none; }
+}
+.pre-logo { animation: preLogoIn 0.7s var(--ease) both, glitch 3s infinite 1s; }
