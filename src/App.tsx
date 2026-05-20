@@ -1,23 +1,29 @@
 import { useState, useCallback } from 'react'
-import Navbar        from './components/layout/Navbar'
-import Footer        from './components/layout/Footer'
-import Hero          from './components/sections/Hero'
-import About         from './components/sections/About'
-import Skills        from './components/sections/Skills'
-import Projects      from './components/sections/Projects'
-import Contact       from './components/sections/Contact'
-import RevealSection from './components/ui/RevealSection'
-import CustomCursor  from './components/ui/CustomCursor'
-import Preloader     from './components/ui/Preloader'
-import FloatingCTA   from './components/ui/FloatingCTA'
+import Navbar          from './components/layout/Navbar'
+import Footer          from './components/layout/Footer'
+import Hero            from './components/sections/Hero'
+import About           from './components/sections/About'
+import Skills          from './components/sections/Skills'
+import Projects        from './components/sections/Projects'
+import Contact         from './components/sections/Contact'
+import RevealSection   from './components/ui/RevealSection'
+import CustomCursor    from './components/ui/CustomCursor'
+import Preloader       from './components/ui/Preloader'
+import FloatingCTA     from './components/ui/FloatingCTA'
+import ScrollProgress  from './components/ui/ScrollProgress'
+import { useLenis }    from './hooks/useLenis'
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true)
   const handleDone = useCallback(() => setLoading(false), [])
 
+  // Buttery smooth scroll
+  useLenis()
+
   return (
     <>
       <CustomCursor />
+      <ScrollProgress />
       <FloatingCTA />
 
       {loading && <Preloader onDone={handleDone} />}

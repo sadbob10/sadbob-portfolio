@@ -4,6 +4,7 @@ import { Menu, X, Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import '../../styles/navbar.css';
 import { useScramble } from '../../hooks/useScramble';
+import ThemeToggle from '../ui/ThemeToggle'
 
 interface NavLink {
   label: string;
@@ -12,7 +13,6 @@ interface NavLink {
 
 function ScrambleLink({
   label,
-  id,
   active,
   onClick,
 }: {
@@ -134,6 +134,7 @@ export default function Navbar(): ReactElement {
         >
           Hire Me
         </button>
+        <ThemeToggle />
 
         {/* Hamburger Menu */}
         <button

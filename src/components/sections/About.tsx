@@ -1,6 +1,8 @@
 import type { ReactElement } from 'react'
 import { MapPin, Calendar, Code2 } from 'lucide-react'
 import '../../styles/about.css'
+import GithubStats from '../ui/GithubStats'
+
 
 export default function About(): ReactElement {
   return (
@@ -56,6 +58,7 @@ export default function About(): ReactElement {
             <span className="avail-dot" />
             Available for freelance and full-time roles
           </div>
+          <GithubStats />
         </div>
 
         {/* ── Right: Code Card ── */}

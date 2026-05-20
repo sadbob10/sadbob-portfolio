@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react'
-import type { ReactElement } from 'react'
-import { Mail, ArrowRight, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import type { ReactElement } from 'react';
+import { Mail, ArrowRight, ChevronDown } from 'lucide-react';
 
-import { useGlitch } from '../../hooks/useGlitch'
-import { useTyping } from '../../hooks/useTyping'
+import { useGlitch } from '../../hooks/useGlitch';
+import { useTyping } from '../../hooks/useTyping';
 
-import { GithubIcon, LinkedinIcon } from '../ui/Icons'
+import { GithubIcon, LinkedinIcon } from '../ui/Icons';
+import ParallaxLayer from '../ui/ParallaxLayer';
 
-import ParticleScene from '../../lib/three/ParticleScene'
+import ParticleScene from '../../lib/three/ParticleScene';
 
-import '../../styles/hero.css'
+import '../../styles/hero.css';
 
 interface StatItem {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 const STATS: StatItem[] = [
@@ -21,23 +22,20 @@ const STATS: StatItem[] = [
   { value: '5+', label: 'Projects Delivered' },
   { value: '2', label: 'Banks Powered' },
   { value: '∞', label: 'Lines of Code' },
-]
+];
 
 export default function Hero(): ReactElement {
-  const [visible, setVisible] = useState<boolean>(false)
+  const [visible, setVisible] = useState<boolean>(false);
 
-  const sadamGlitch = useGlitch('SADAM', 600)
-  const abateGlitch = useGlitch('ABATE', 1100)
+  const sadamGlitch = useGlitch('SADAM', 600);
+  const abateGlitch = useGlitch('ABATE', 1100);
 
-  const role = useTyping()
+  const role = useTyping();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(true)
-    }, 80)
-
-    return () => clearTimeout(timer)
-  }, [])
+    const timer = setTimeout(() => setVisible(true), 80);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="hero">
@@ -45,7 +43,29 @@ export default function Hero(): ReactElement {
       <ParticleScene />
 
       {/* Aurora Overlay */}
-      <div className="aurora" />
+      <ParallaxLayer
+        speed={0.15}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      >
+        <div className="aurora" style={{ position: 'absolute', inset: 0 }} />
+      </ParallaxLayer>
+
+      {/* Hero Grid Background */}
+      <ParallaxLayer
+        speed={0.08}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+        }}
+      >
+        <div className="hero-grid" style={{ position: 'absolute', inset: 0 }} />
+      </ParallaxLayer>
 
       {/* Main Content */}
       <div className={`hero-content ${visible ? 'show' : ''}`}>
@@ -56,9 +76,7 @@ export default function Hero(): ReactElement {
         </div>
 
         {/* Location */}
-        <p className="h-location">
-          📍 Addis Ababa, Ethiopia · 🇪🇹
-        </p>
+        <p className="h-location">📍 Addis Ababa, Ethiopia · 🇪🇹</p>
 
         {/* Name */}
         <div className="name-block">
@@ -66,9 +84,7 @@ export default function Hero(): ReactElement {
             {sadamGlitch.text.split('').map((ch: string, i: number) => (
               <span
                 key={i}
-                className={`glyph ${
-                  !sadamGlitch.done ? 'scrambling' : ''
-                }`}
+                className={`glyph ${!sadamGlitch.done ? 'scrambling' : ''}`}
               >
                 {ch}
               </span>
@@ -79,9 +95,7 @@ export default function Hero(): ReactElement {
             {abateGlitch.text.split('').map((ch: string, i: number) => (
               <span
                 key={i}
-                className={`glyph ${
-                  !abateGlitch.done ? 'scrambling' : ''
-                }`}
+                className={`glyph ${!abateGlitch.done ? 'scrambling' : ''}`}
               >
                 {ch}
               </span>
@@ -97,7 +111,6 @@ export default function Hero(): ReactElement {
         {/* Typing Role */}
         <div className="role-wrap">
           <div className="role-bar" />
-
           <div className="role-text">
             {role}
             <span className="cursor" />
@@ -107,9 +120,9 @@ export default function Hero(): ReactElement {
         {/* Description */}
         <p className="h-desc">
           Building <strong>enterprise-grade</strong> systems that power{' '}
-          <em>Ethiopian banks</em> and real businesses.
-          Expert in <strong>React + Spring Boot</strong> full-stack
-          development and <strong>React Native</strong> mobile apps.
+          <em>Ethiopian banks</em> and real businesses. Expert in{' '}
+          <strong>React + Spring Boot</strong> full-stack development and{' '}
+          <strong>React Native</strong> mobile apps.
         </p>
 
         {/* CTA Buttons */}
@@ -119,10 +132,7 @@ export default function Hero(): ReactElement {
             <ArrowRight size={15} />
           </a>
 
-          <a
-            href="mailto:abate.shallo@gmail.com"
-            className="btn-outline"
-          >
+          <a href="mailto:abate.shallo@gmail.com" className="btn-outline">
             Let's Talk
             <Mail size={15} />
           </a>
@@ -161,15 +171,10 @@ export default function Hero(): ReactElement {
 
         {/* Stats */}
         <div className="h-stats">
-          {STATS.map(({ value, label }: StatItem) => (
+          {STATS.map(({ value, label }) => (
             <div className="stat-item" key={label}>
-              <div className="stat-n grad-text">
-                {value}
-              </div>
-
-              <div className="stat-l">
-                {label}
-              </div>
+              <div className="stat-n grad-text">{value}</div>
+              <div className="stat-l">{label}</div>
             </div>
           ))}
         </div>
@@ -178,16 +183,9 @@ export default function Hero(): ReactElement {
       {/* Scroll Indicator */}
       <div className="scroll-ind">
         <div className="scroll-line" />
-
-        <span className="scroll-txt">
-          scroll
-        </span>
-
-        <ChevronDown
-          size={13}
-          color="var(--muted)"
-        />
+        <span className="scroll-txt">scroll</span>
+        <ChevronDown size={13} color="var(--muted)" />
       </div>
     </section>
-  )
+  );
 }

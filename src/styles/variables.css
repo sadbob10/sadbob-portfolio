@@ -27,3 +27,44 @@
   /* ── Transitions ── */
   --ease:      cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --bg:     #f0f2ff;
+  --bg2:    #e4e8ff;
+  --bg3:    #d8dcff;
+
+  --white:  #080818;
+  --muted:  #5a6490;
+  --faint:  #a0a8c8;
+
+  --border: rgba(100, 80, 200, 0.15);
+  --card:   rgba(0, 0, 0, 0.03);
+
+  --grad-main: linear-gradient(125deg, #00b8d9, #7c3aed, #db2777);
+  --grad-text: linear-gradient(125deg, #00b8d9 0%, #7c3aed 50%, #db2777 100%);
+}
+
+[data-theme="light"] body::after { opacity: 0.012; }
+
+[data-theme="light"] .code-card,
+[data-theme="light"] .code-body,
+[data-theme="light"] .contact-form-wrap { background: #e8eaff; }
+
+[data-theme="light"] .aurora {
+  background:
+    radial-gradient(ellipse 85% 65% at 5%  35%, rgba(0,180,220,.1)  0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 95% 75%, rgba(124,58,237,.12) 0%, transparent 50%),
+    radial-gradient(ellipse 55% 50% at 50% 95%, rgba(219,39,119,.08) 0%, transparent 45%);
+}
+
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(240,242,255,0.9);
+  border-bottom: 1px solid rgba(100,80,200,0.1);
+}
+
+[data-theme="light"] .hero-grid {
+  background-image:
+    linear-gradient(rgba(0,180,220,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,220,.06) 1px, transparent 1px);
+}
