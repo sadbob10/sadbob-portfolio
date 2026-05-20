@@ -1,28 +1,53 @@
 import { useState, useEffect } from 'react';
 import type { ReactElement } from 'react';
-import { Mail, ArrowRight, ChevronDown } from 'lucide-react';
+import { Mail, ArrowRight, ChevronDown, Download } from 'lucide-react';
 
 import { useGlitch } from '../../hooks/useGlitch';
 import { useTyping } from '../../hooks/useTyping';
+import { useCountUp } from '../../hooks/useCountUp';
 
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import ParallaxLayer from '../ui/ParallaxLayer';
-
 import ParticleScene from '../../lib/three/ParticleScene';
+import MagneticButton from '../ui/MagneticButton'
 
 import '../../styles/hero.css';
+
+const CV_URL = 'https://drive.google.com/uc?export=download&id=1D7aJmS9sViElkp5qz81a489JlX7lHGiC';
 
 interface StatItem {
   value: string;
   label: string;
 }
 
+// Static stats config (for reference)
 const STATS: StatItem[] = [
   { value: '3+', label: 'Years Experience' },
   { value: '5+', label: 'Projects Delivered' },
   { value: '2', label: 'Banks Powered' },
   { value: '∞', label: 'Lines of Code' },
 ];
+
+function StatCounter({
+  value,
+  label,
+  isInfinity = false,
+}: {
+  value: number;
+  label: string;
+  isInfinity?: boolean;
+}): ReactElement {
+  const { count, ref } = useCountUp(value, 1800);
+
+  return (
+    <div className="stat-item" ref={ref}>
+      <div className="stat-n grad-text">
+        {isInfinity ? '∞' : `${count}+`}
+      </div>
+      <div className="stat-l">{label}</div>
+    </div>
+  );
+}
 
 export default function Hero(): ReactElement {
   const [visible, setVisible] = useState<boolean>(false);
@@ -127,14 +152,26 @@ export default function Hero(): ReactElement {
 
         {/* CTA Buttons */}
         <div className="btn-row">
-          <a href="#projects" className="btn-primary">
-            See My Work
-            <ArrowRight size={15} />
-          </a>
+          <MagneticButton className="btn-primary"
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
+            See My Work <ArrowRight size={15} />
+          </MagneticButton>
 
           <a href="mailto:abate.shallo@gmail.com" className="btn-outline">
-            Let's Talk
-            <Mail size={15} />
+            Let's Talk <Mail size={15} />
+          </a>
+
+          <a
+            href={CV_URL}
+            download="Sadam_Abate_Resume.pdf"
+            className="btn-outline"
+            style={{
+              borderColor: 'rgba(0,229,255,0.3)',
+              color: 'var(--cyan)',
+            }}
+          >
+            <Download size={15} />
+            Download CV
           </a>
         </div>
 
@@ -169,14 +206,12 @@ export default function Hero(): ReactElement {
           </a>
         </div>
 
-        {/* Stats */}
+        {/* Animated Stats */}
         <div className="h-stats">
-          {STATS.map(({ value, label }) => (
-            <div className="stat-item" key={label}>
-              <div className="stat-n grad-text">{value}</div>
-              <div className="stat-l">{label}</div>
-            </div>
-          ))}
+          <StatCounter value={3} label="Years Experience" />
+          <StatCounter value={5} label="Projects Delivered" />
+          <StatCounter value={2} label="Banks Powered" />
+          <StatCounter value={0} label="Lines of Code" isInfinity />
         </div>
       </div>
 

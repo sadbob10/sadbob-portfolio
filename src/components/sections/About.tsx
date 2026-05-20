@@ -1,20 +1,138 @@
-import type { ReactElement } from 'react'
-import { MapPin, Calendar, Code2 } from 'lucide-react'
-import '../../styles/about.css'
-import GithubStats from '../ui/GithubStats'
-
+import type { ReactElement } from 'react';
+import { MapPin, Calendar, Code2, Zap, Globe } from 'lucide-react';
+import '../../styles/about.css';
+import GithubStats from '../ui/GithubStats';
+import profilePhoto from '../../assets/profile.jpg'
 
 export default function About(): ReactElement {
   return (
     <section className="about" id="about">
-
       {/* Header */}
       <p className="sec-tag">Who I Am</p>
       <h2 className="sec-title">About Me</h2>
 
-      <div className="about-grid">
+      <div
+        className="about-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '260px 1fr 1fr',
+          gap: '3.5rem',
+          alignItems: 'start',
+        }}
+      >
+        {/* ── Premium Profile Card ── */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '2rem',
+          }}
+        >
+          {/* Profile Photo */}
+          <div
+            style={{
+              position: 'relative',
+              width: '260px',
+              height: '260px',
+              padding: '6px',
+              background: 'linear-gradient(145deg, #00e5ff, #7b00ff, #ff00c3)',
+              borderRadius: '50%',
+              boxShadow: '0 20px 40px rgba(0, 229, 255, 0.15)',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+            className="profile-wrapper"
+          >
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                background: 'var(--bg3)',
+                border: '4px solid rgba(0,0,0,0.6)',
+              }}
+            >
+              {/* Replace with real photo when available */}
+             <div
+              style={{
+                   width:        '100%',
+    height:       '100%',
+    borderRadius: '50%',
+    overflow:     'hidden',
+    background:   'var(--bg3)',
+    border:       '4px solid rgba(0,0,0,0.6)',
+  }}
+>
+  <img
+    src={profilePhoto}
+    alt="Sadam Abate"
+    style={{
+      width:           '100%',
+      height:          '100%',
+      objectFit:       'cover',
+      objectPosition:  'center top',
+      borderRadius:    '50%',
+    }}
+  />
+</div>
+            </div>
 
-        {/* ── Left: Text ── */}
+            {/* Available Status Ring */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '12px',
+                width: '28px',
+                height: '28px',
+                background: '#10b981',
+                border: '3px solid var(--bg)',
+                borderRadius: '50%',
+                boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.3)',
+              }}
+            />
+          </div>
+
+          {/* Quick Info Pills */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.65rem',
+              width: '100%',
+            }}
+          >
+            {[
+              { icon: MapPin, text: 'Addis Ababa, Ethiopia' },
+              { icon: Zap, text: 'Available for opportunities' },
+              { icon: Globe, text: 'Remote & On-site' },
+              { icon: Calendar, text: 'Available immediately' },
+            ].map(({ icon: Icon, text }) => (
+              <div
+                key={text}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.75rem 1rem',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '12px',
+                  fontSize: '0.9rem',
+                  color: 'var(--muted)',
+                  transition: 'all 0.2s',
+                }}
+                className="info-pill"
+              >
+                <Icon size={18} style={{ color: '#00e5ff' }} />
+                {text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Middle: Text Content ── */}
         <div className="about-text">
           <p>
             I'm <strong>Sadam Abate</strong>, a full stack developer based in{' '}
@@ -54,10 +172,11 @@ export default function About(): ReactElement {
             </div>
           </div>
 
-          <div className="avail-badge" style={{ marginTop: '1.5rem' }}>
+          <div className="avail-badge" style={{ marginTop: '2rem' }}>
             <span className="avail-dot" />
             Available for freelance and full-time roles
           </div>
+
           <GithubStats />
         </div>
 
@@ -136,8 +255,7 @@ export default function About(): ReactElement {
             <div><span className="cm">{'}'}</span></div>
           </div>
         </div>
-
       </div>
     </section>
-  )
+  );
 }

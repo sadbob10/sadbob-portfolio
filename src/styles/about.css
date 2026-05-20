@@ -170,3 +170,13 @@
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-stats { grid-template-columns: repeat(3, 1fr); }
 }
+
+.profile-wrapper:hover {
+  transform: scale(1.03);
+  box-shadow: 0 25px 50px rgba(0, 229, 255, 0.25);
+}
+
+.info-pill:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(0, 229, 255, 0.2);
+}
