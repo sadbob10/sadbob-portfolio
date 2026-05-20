@@ -1,28 +1,34 @@
-import { useState, useEffect } from 'react';
-import type { ReactElement } from 'react';
-import { Menu, X, Mail } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from '../ui/Icons';
-import '../../styles/navbar.css';
-import { useScramble } from '../../hooks/useScramble';
+import { useState, useEffect } from 'react'
+import type { ReactElement } from 'react'
+import { Menu, X, Mail, Home } from 'lucide-react'
+import { GithubIcon, LinkedinIcon } from '../ui/Icons'
 import ThemeToggle from '../ui/ThemeToggle'
+import { useScramble } from '../../hooks/useScramble'
+import '../../styles/navbar.css'
 
 interface NavLink {
-  label: string;
-  id: string;
+  label: string
+  id:    string
 }
+
+const LINKS: NavLink[] = [
+  { label: 'About',      id: 'about'      },
+  { label: 'Skills',     id: 'skills'     },
+  { label: 'Projects',   id: 'projects'   },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Contact',    id: 'contact'    },
+]
 
 function ScrambleLink({
   label,
   active,
   onClick,
 }: {
-  label: string;
-  id: string;
-  active: boolean;
-  onClick: () => void;
+  label:   string
+  active:  boolean
+  onClick: () => void
 }): ReactElement {
-  const { text, scramble, reset } = useScramble(label);
-
+  const { text, scramble, reset } = useScramble(label)
   return (
     <span
       className={`nav-link${active ? ' active' : ''}`}
@@ -34,72 +40,59 @@ function ScrambleLink({
     >
       {text}
     </span>
-  );
+  )
 }
 
-const LINKS: NavLink[] = [
-  { label: 'About', id: 'about' },
-  { label: 'Skills', id: 'skills' },
-  { label: 'Projects', id: 'projects' },
-  { label: 'Contact', id: 'contact' },
-];
-
 export default function Navbar(): ReactElement {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeId, setActiveId] = useState('');
+  const [scrolled,  setScrolled]  = useState(false)
+  const [menuOpen,  setMenuOpen]  = useState(false)
+  const [activeId,  setActiveId]  = useState('')
 
-  // Scroll effect for navbar style
+  // Scroll detection
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const fn = (): void => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
 
-  // Active section observer
+  // Active section highlight
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveId(e.target.id)
+        })
       },
       { rootMargin: '-40% 0px -55% 0px' }
-    );
-
+    )
     LINKS.forEach(({ id }) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    });
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
 
-    return () => observer.disconnect();
-  }, []);
-
-  // Prevent body scroll when mobile menu is open
+  // Lock body scroll when menu open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [menuOpen]);
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
 
-  const goTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-    setMenuOpen(false);
-  };
+  const goTo = (id: string): void => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setMenuOpen(false)
+  }
 
-  const goTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const goTop = (): void => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setMenuOpen(false)
+  }
 
   return (
     <>
+      {/* ── Desktop Navbar ── */}
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
+
         {/* Logo */}
         <div
           className="nav-logo"
@@ -113,13 +106,12 @@ export default function Navbar(): ReactElement {
           <span className="logo-dot">.</span>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop links */}
         <ul className="nav-links">
           {LINKS.map((link) => (
             <li key={link.id}>
               <ScrambleLink
                 label={link.label}
-                id={link.id}
                 active={activeId === link.id}
                 onClick={() => goTo(link.id)}
               />
@@ -127,87 +119,109 @@ export default function Navbar(): ReactElement {
           ))}
         </ul>
 
-        <button
-          type="button"
-          className="nav-cta"
-          onClick={() => goTo('contact')}
-        >
-          Hire Me
-        </button>
-        <ThemeToggle />
+        {/* Right actions */}
+        <div className="nav-actions">
+          <button
+            type="button"
+            className="nav-cta"
+            onClick={() => goTo('contact')}
+          >
+            Hire Me
+          </button>
 
-        {/* Hamburger Menu */}
-        <button
-          type="button"
-          className="nav-ham"
-          onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
-        >
-          <Menu size={22} />
-        </button>
+          {/* Desktop-only ThemeToggle */}
+          <span className="nav-theme-desktop">
+            <ThemeToggle />
+          </span>
+
+          <button
+            type="button"
+            className="nav-ham"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu size={22} />
+          </button>
+        </div>
       </nav>
 
-      {/* Mobile Menu */}
-      <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
+      {/* ── Mobile Menu ── */}
+      <div
+        className={`mobile-menu${menuOpen ? ' open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+      >
+        {/* Close button */}
         <button
           type="button"
           className="mobile-close"
           onClick={() => setMenuOpen(false)}
           aria-label="Close menu"
         >
-          <X size={26} />
+          <X size={22} />
         </button>
 
-        {LINKS.map((link) => (
+        {/* Logo */}
+        <div className="mobile-logo">
+          <span className="logo-sad">sad</span>
+          <span className="logo-bob">bob</span>
+          <span className="logo-dot">.</span>
+        </div>
+
+        {/* Nav links */}
+        <div className="mobile-links">
           <span
-            key={link.id}
-            className="mobile-link"
-            onClick={() => goTo(link.id)}
+            className="mobile-link mobile-link-home"
+            onClick={goTop}
             role="button"
             tabIndex={0}
           >
-            {link.label}
+            <Home size={16} />
+            Home
           </span>
-        ))}
 
-        <button
-          type="button"
-          className="btn-primary"
-          onClick={() => goTo('contact')}
-        >
-          Hire Me
-        </button>
+          <div className="mobile-divider" />
 
-        <div className="mobile-socials">
-          <a
-            href="https://github.com/sadbob10"
-            target="_blank"
-            rel="noreferrer"
-            className="soc"
-            aria-label="GitHub"
+          {LINKS.map((link) => (
+            <span
+              key={link.id}
+              className="mobile-link"
+              onClick={() => goTo(link.id)}
+              role="button"
+              tabIndex={0}
+            >
+              {link.label}
+            </span>
+          ))}
+        </div>
+
+        {/* Bottom actions */}
+        <div className="mobile-actions">
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => goTo('contact')}
+            style={{ width: '100%', justifyContent: 'center' }}
           >
-            <GithubIcon size={18} />
-          </a>
+            Hire Me
+          </button>
 
-          <a
-            href="https://www.linkedin.com/in/sadam-abate"
-            target="_blank"
-            rel="noreferrer"
-            className="soc"
-            aria-label="LinkedIn"
-          >
-            <LinkedinIcon size={18} />
-          </a>
+          <div className="mobile-socials">
+            <a href="https://github.com/sadbob10" target="_blank" rel="noreferrer" className="soc">
+              <GithubIcon size={18} />
+            </a>
+            <a href="https://www.linkedin.com/in/sadam-abate" target="_blank" rel="noreferrer" className="soc">
+              <LinkedinIcon size={18} />
+            </a>
+            <a href="mailto:abate.shallo@gmail.com" className="soc">
+              <Mail size={18} />
+            </a>
+          </div>
 
-          <a
-            href="mailto:abate.shallo@gmail.com"
-            className="soc"
-            aria-label="Email"
-          >
-            <Mail size={18} />
-          </a>
+          {/* Mobile ThemeToggle */}
+          <ThemeToggle />
         </div>
       </div>
     </>
-  );
+  )
 }
