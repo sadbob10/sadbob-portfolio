@@ -1,34 +1,35 @@
-import { useState, useEffect } from 'react'
-import type { ReactElement } from 'react'
-import { Menu, X, Mail, Home } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '../ui/Icons'
-import ThemeToggle from '../ui/ThemeToggle'
-import { useScramble } from '../../hooks/useScramble'
-import '../../styles/navbar.css'
+import { useState, useEffect } from 'react';
+import type { ReactElement } from 'react';
+import { Menu, X, Mail, Home } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '../ui/Icons';
+import ThemeToggle from '../ui/ThemeToggle';
+import { useScramble } from '../../hooks/useScramble';
+import '../../styles/navbar.css';
 
 interface NavLink {
-  label: string
-  id:    string
+  label: string;
+  id: string;
 }
 
 const LINKS: NavLink[] = [
-  { label: 'About',      id: 'about'      },
-  { label: 'Skills',     id: 'skills'     },
-  { label: 'Projects',   id: 'projects'   },
+  { label: 'About', id: 'about' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
   { label: 'Experience', id: 'experience' },
-  { label: 'Contact',    id: 'contact'    },
-]
+  { label: 'Contact', id: 'contact' },
+];
 
 function ScrambleLink({
   label,
   active,
   onClick,
 }: {
-  label:   string
-  active:  boolean
-  onClick: () => void
+  label: string;
+  active: boolean;
+  onClick: () => void;
 }): ReactElement {
-  const { text, scramble, reset } = useScramble(label)
+  const { text, scramble, reset } = useScramble(label);
+
   return (
     <span
       className={`nav-link${active ? ' active' : ''}`}
@@ -40,59 +41,62 @@ function ScrambleLink({
     >
       {text}
     </span>
-  )
+  );
 }
 
 export default function Navbar(): ReactElement {
-  const [scrolled,  setScrolled]  = useState(false)
-  const [menuOpen,  setMenuOpen]  = useState(false)
-  const [activeId,  setActiveId]  = useState('')
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeId, setActiveId] = useState('');
 
   // Scroll detection
   useEffect(() => {
-    const fn = (): void => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', fn, { passive: true })
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
+    const fn = (): void => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
 
-  // Active section highlight
+  // Active section observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) setActiveId(e.target.id)
-        })
+          if (e.isIntersecting) setActiveId(e.target.id);
+        });
       },
       { rootMargin: '-40% 0px -55% 0px' }
-    )
-    LINKS.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
+    );
 
-  // Lock body scroll when menu open
+    LINKS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Prevent body scroll when menu is open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   const goTo = (id: string): void => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    setMenuOpen(false)
-  }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false);
+  };
 
   const goTop = (): void => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    setMenuOpen(false)
-  }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setMenuOpen(false);
+  };
 
   return (
     <>
-      {/* ── Desktop Navbar ── */}
+      {/* Desktop Navbar */}
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
-
         {/* Logo */}
         <div
           className="nav-logo"
@@ -106,7 +110,7 @@ export default function Navbar(): ReactElement {
           <span className="logo-dot">.</span>
         </div>
 
-        {/* Desktop links */}
+        {/* Desktop Navigation */}
         <ul className="nav-links">
           {LINKS.map((link) => (
             <li key={link.id}>
@@ -119,7 +123,7 @@ export default function Navbar(): ReactElement {
           ))}
         </ul>
 
-        {/* Right actions */}
+        {/* Desktop Right Side */}
         <div className="nav-actions">
           <button
             type="button"
@@ -129,7 +133,6 @@ export default function Navbar(): ReactElement {
             Hire Me
           </button>
 
-          {/* Desktop-only ThemeToggle */}
           <span className="nav-theme-desktop">
             <ThemeToggle />
           </span>
@@ -145,21 +148,38 @@ export default function Navbar(): ReactElement {
         </div>
       </nav>
 
-      {/* ── Mobile Menu ── */}
+      {/* ── Premium Mobile Menu ── */}
       <div
         className={`mobile-menu${menuOpen ? ' open' : ''}`}
         role="dialog"
         aria-modal="true"
       >
-        {/* Close button */}
-        <button
-          type="button"
-          className="mobile-close"
-          onClick={() => setMenuOpen(false)}
-          aria-label="Close menu"
+        {/* Top Bar */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '1.4rem',
+            left: '1.4rem',
+            right: '1.4rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            zIndex: 10,
+          }}
         >
-          <X size={22} />
-        </button>
+          {/* Theme Toggle - Left */}
+          <ThemeToggle />
+
+          {/* Close Button - Right */}
+          <button
+            type="button"
+            className="mobile-close"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={22} />
+          </button>
+        </div>
 
         {/* Logo */}
         <div className="mobile-logo">
@@ -168,7 +188,7 @@ export default function Navbar(): ReactElement {
           <span className="logo-dot">.</span>
         </div>
 
-        {/* Nav links */}
+        {/* Navigation Links */}
         <div className="mobile-links">
           <span
             className="mobile-link mobile-link-home"
@@ -195,7 +215,7 @@ export default function Navbar(): ReactElement {
           ))}
         </div>
 
-        {/* Bottom actions */}
+        {/* Bottom Actions */}
         <div className="mobile-actions">
           <button
             type="button"
@@ -207,21 +227,31 @@ export default function Navbar(): ReactElement {
           </button>
 
           <div className="mobile-socials">
-            <a href="https://github.com/sadbob10" target="_blank" rel="noreferrer" className="soc">
+            <a
+              href="https://github.com/sadbob10"
+              target="_blank"
+              rel="noreferrer"
+              className="soc"
+            >
               <GithubIcon size={18} />
             </a>
-            <a href="https://www.linkedin.com/in/sadam-abate" target="_blank" rel="noreferrer" className="soc">
+            <a
+              href="https://www.linkedin.com/in/sadam-abate"
+              target="_blank"
+              rel="noreferrer"
+              className="soc"
+            >
               <LinkedinIcon size={18} />
             </a>
-            <a href="mailto:abate.shallo@gmail.com" className="soc">
+            <a
+              href="mailto:abate.shallo@gmail.com"
+              className="soc"
+            >
               <Mail size={18} />
             </a>
           </div>
-
-          {/* Mobile ThemeToggle */}
-          <ThemeToggle />
         </div>
       </div>
     </>
-  )
+  );
 }
