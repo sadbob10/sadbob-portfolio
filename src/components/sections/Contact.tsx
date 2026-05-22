@@ -3,6 +3,7 @@ import type { ReactElement, FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import { Mail, Send, Loader } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
+import SplitText from '../ui/SplitText'
 import '../../styles/contact.css';
 
 interface FormState {
@@ -61,8 +62,12 @@ export default function Contact(): ReactElement {
 
       <section className="contact" id="contact">
         {/* Header */}
-        <p className="sec-tag">Get In Touch</p>
-        <h2 className="sec-title">Let's Build Together</h2>
+        <p className="mono-label">Get In Touch</p>
+        <div className="section-heading">
+          <SplitText text="Let's"  className="word-accent" staggerMs={55} />
+          <SplitText text=" Build" className="word-plain"  staggerMs={55} delayMs={200} />
+          <SplitText text=" Together" className="word-plain" staggerMs={45} delayMs={400} />
+        </div>
 
         <div className="contact-grid">
           {/* Left: Info */}

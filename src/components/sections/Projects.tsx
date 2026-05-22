@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react';
 import { GithubIcon } from '../ui/Icons';
 import { PROJECTS, PROJECT_FILTERS } from '../../data/projects';
 import type { Project, ProjectFilter } from '../../data/projects';
+import SplitText from '../ui/SplitText';
 import '../../styles/projects.css';
 
 export default function Projects(): ReactElement {
@@ -68,8 +69,11 @@ export default function Projects(): ReactElement {
 
       <section className="projects" id="projects">
         {/* Header */}
-        <p className="sec-tag">Portfolio</p>
-        <h2 className="sec-title">Featured Projects</h2>
+        <p className="mono-label">Portfolio</p>
+        <div className="section-heading">
+          <SplitText text="Featured"  className="word-accent" staggerMs={45} />
+          <SplitText text=" Projects" className="word-plain"  staggerMs={45} delayMs={300} />
+        </div>
         <p className="sec-sub">
           Enterprise systems powering real banks.
           <br />

@@ -9,7 +9,7 @@ import { useCountUp } from '../../hooks/useCountUp';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import ParallaxLayer from '../ui/ParallaxLayer';
 import ParticleScene from '../../lib/three/ParticleScene';
-import MagneticButton from '../ui/MagneticButton'
+import MagneticButton from '../ui/MagneticButton';
 
 import '../../styles/hero.css';
 
@@ -103,28 +103,36 @@ export default function Hero(): ReactElement {
         {/* Location */}
         <p className="h-location">📍 Addis Ababa, Ethiopia · 🇪🇹</p>
 
-        {/* Name */}
+        {/* Name — Glitch Decode with stroke effect */}
         <div className="name-block">
+          {/* SADAM — white */}
           <span className="name-line name-first">
             {sadamGlitch.text.split('').map((ch: string, i: number) => (
               <span
                 key={i}
-                className={`glyph ${!sadamGlitch.done ? 'scrambling' : ''}`}
+                className={`glyph${!sadamGlitch.done ? ' scrambling' : ''}`}
               >
                 {ch}
               </span>
             ))}
           </span>
 
-          <span className="name-line name-last grad-text">
-            {abateGlitch.text.split('').map((ch: string, i: number) => (
-              <span
-                key={i}
-                className={`glyph ${!abateGlitch.done ? 'scrambling' : ''}`}
-              >
-                {ch}
-              </span>
-            ))}
+          {/* ABATE — gradient + stroke shadow */}
+          <span className="name-line name-last">
+            <span className="name-last-fill">
+              {abateGlitch.text.split('').map((ch: string, i: number) => (
+                <span
+                  key={i}
+                  className={`glyph${!abateGlitch.done ? ' scrambling' : ''}`}
+                >
+                  {ch}
+                </span>
+              ))}
+            </span>
+            {/* Decorative offset stroke */}
+            <span className="name-last-stroke" aria-hidden="true">
+              {abateGlitch.text}
+            </span>
           </span>
         </div>
 
@@ -152,8 +160,10 @@ export default function Hero(): ReactElement {
 
         {/* CTA Buttons */}
         <div className="btn-row">
-          <MagneticButton className="btn-primary"
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
+          <MagneticButton
+            className="btn-primary"
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             See My Work <ArrowRight size={15} />
           </MagneticButton>
 

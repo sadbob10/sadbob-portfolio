@@ -3,13 +3,19 @@ import { MapPin, Calendar, Code2, Zap, Globe } from 'lucide-react';
 import '../../styles/about.css';
 import GithubStats from '../ui/GithubStats';
 import profilePhoto from '../../assets/profile.jpg';
+import SplitText from '../ui/SplitText';
 
 export default function About(): ReactElement {
   return (
     <section className="about" id="about">
       {/* Header */}
-      <p className="sec-tag">Who I Am</p>
-      <h2 className="sec-title">About Me</h2>
+      <p className="mono-label">Who I Am</p>
+
+      {/* Updated SplitText Title */}
+      <div className="section-heading">
+        <SplitText text="About" className="word-accent" staggerMs={55} />
+        <SplitText text=" Me" className="word-plain" staggerMs={55} delayMs={250} />
+      </div>
 
       {/* Grid with class only - no inline styles */}
       <div className="about-grid">

@@ -68,19 +68,53 @@
   margin-bottom: 1.8rem;
 }
 
-/* ── NAME ── */
-.name-block { margin-bottom: .9rem; }
+/* ── NAME LINES ── */
+.name-block { margin-bottom: 0.9rem; }
+
 .name-line {
   display: block;
   font-family: var(--font-head);
   font-weight: 800;
-  line-height: .93;
-  letter-spacing: -.045em;
+  line-height: 0.93;
+  letter-spacing: -0.045em;
   font-size: clamp(4.5rem, 12vw, 9rem);
 }
-.name-first { color: var(--white); }
-.name-last  { filter: drop-shadow(0 0 40px rgba(162,89,255,.35)); }
 
+/* SADAM — solid white with subtle glow */
+.name-first {
+  color: var(--white);
+  text-shadow:
+    0 0 80px rgba(0,229,255,0.12),
+    0 0 120px rgba(162,89,255,0.08);
+}
+
+/* ABATE — mix of gradient fill + stroke outline */
+.name-last {
+  position: relative;
+}
+
+/* Filled gradient version (visible) */
+.name-last-fill {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 35px rgba(162,89,255,0.4));
+}
+
+/* Stroke outline layered behind (decorative) */
+.name-last-stroke {
+  position: absolute;
+  left: 3px; top: 3px;
+  -webkit-text-stroke: 1px rgba(0,229,255,0.2);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+}
+
+/* Glyph scramble chars */
 .glyph { display: inline-block; transition: color .05s; }
 .glyph.scrambling {
   color: var(--cyan);
@@ -277,40 +311,17 @@
     letter-spacing: -0.03em;
   }
 
-  .h-desc { font-size: 0.92rem; }
-
-  .btn-row {
-    flex-direction: column;
-  }
   .btn-row .btn-primary,
-  .btn-row .btn-outline {
-    width: 100%;
-    justify-content: center;
-  }
+  .btn-row .btn-outline { width: 100%; justify-content: center; }
+
+  .stat-item { padding-right: 1.5rem; margin-right: 1.5rem; }
+
+  .h-stats { gap: 1.2rem; }
 
   .role-text { font-size: clamp(1rem, 4vw, 1.4rem); }
-
-  /* Stats — 2x2 grid on mobile */
-  .h-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255,255,255,0.055);
-  }
-  .stat-item {
-    border-right: none !important;
-    margin-right: 0 !important;
-    padding: 0.85rem;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.06) !important;
-    border-radius: 10px;
-    text-align: center;
-  }
-  .stat-n { font-size: 1.8rem; }
-  .stat-l { font-size: 0.72rem; }
 }
 
+/* Extra small phones */
 @media (max-width: 400px) {
   .name-line {
     font-size: 11vw;

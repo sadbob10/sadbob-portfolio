@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import { EXPERIENCE } from '../../data/experience'
 import type { Experience as Exp } from '../../data/experience'
+import SplitText from '../ui/SplitText'
 import '../../styles/experience.css'
 
 export default function Experience(): ReactElement {
@@ -29,8 +30,11 @@ export default function Experience(): ReactElement {
       <div className="sec-divider" />
       <section className="experience" id="experience">
 
-        <p className="sec-tag">Career</p>
-        <h2 className="sec-title">Experience</h2>
+        <p className="mono-label">Career</p>
+        <div className="section-heading">
+          <SplitText text="My"         className="word-accent" staggerMs={60} />
+          <SplitText text=" Experience" className="word-plain" staggerMs={50} delayMs={150} />
+        </div>
         <p className="sec-sub">
           Building real enterprise systems used by real people — from day one.
         </p>
