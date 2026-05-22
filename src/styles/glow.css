@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════
+   GLOBAL GLOW SYSTEM
+═══════════════════════════════════════ */
+
+/* ── Glow utilities ── */
+.glow-cyan   { box-shadow: 0 0 20px rgba(0,229,255,.18), 0 0 50px rgba(0,229,255,.08); }
+.glow-purple { box-shadow: 0 0 20px rgba(162,89,255,.18), 0 0 50px rgba(162,89,255,.08); }
+.glow-pink   { box-shadow: 0 0 20px rgba(247,37,133,.18), 0 0 50px rgba(247,37,133,.08); }
+
+/* ── Glassmorphism ── */
+.glass {
+  background:             rgba(255,255,255,0.03);
+  backdrop-filter:        blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border:                 1px solid rgba(255,255,255,0.07);
+}
+.glass-strong {
+  background:             rgba(255,255,255,0.06);
+  backdrop-filter:        blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border:                 1px solid rgba(255,255,255,0.1);
+}
+
+/* ── Animated gradient border ── */
+.grad-border {
+  position: relative;
+  z-index: 0;
+}
+.grad-border::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  background: linear-gradient(125deg, var(--cyan), var(--purple), var(--pink), var(--cyan));
+  background-size: 300% 300%;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.35s;
+  animation: gradBorderSpin 4s linear infinite;
+}
+.grad-border:hover::before { opacity: 1; }
+
+@keyframes gradBorderSpin {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* ── Pulsing glow border on cards ── */
+.pulse-border {
+  animation: pulseBorder 3s ease-in-out infinite;
+}
+@keyframes pulseBorder {
+  0%, 100% { border-color: rgba(162,89,255,0.1); }
+  50%       { border-color: rgba(162,89,255,0.4);
+              box-shadow: 0 0 20px rgba(162,89,255,0.1); }
+}
+
+/* ── Neon text glow ── */
+.neon-cyan {
+  text-shadow:
+    0 0 10px rgba(0,229,255,0.8),
+    0 0 20px rgba(0,229,255,0.5),
+    0 0 40px rgba(0,229,255,0.3);
+}
+.neon-purple {
+  text-shadow:
+    0 0 10px rgba(162,89,255,0.8),
+    0 0 20px rgba(162,89,255,0.5),
+    0 0 40px rgba(162,89,255,0.3);
+}
+
+/* ── Glowing buttons ── */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg,
+    rgba(255,255,255,0.15) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.btn-primary:hover {
+  box-shadow:
+    0 0 25px rgba(0,229,255,0.35),
+    0 0 50px rgba(162,89,255,0.15),
+    0 14px 40px rgba(0,229,255,0.2) !important;
+}
+.btn-primary:hover::before { opacity: 1; }
+
+/* ── Ripple on click ── */
+.ripple-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transform: scale(0);
+  animation: rippleAnim 0.55s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ── Glow divider ── */
+.glow-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0,229,255,0.3),
+    rgba(162,89,255,0.3),
+    rgba(247,37,133,0.2),
+    transparent
+  );
+  margin: 0 2.5rem;
+  position: relative;
+}
+.glow-divider::after {
+  content: '';
+  position: absolute;
+  top: -2px; left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 5px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  filter: blur(6px);
+  opacity: 0.5;
+  border-radius: 10px;
+}
+
+/* ── Floating gradient blobs ── */
+.blob-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+  animation: blobFloat 10s ease-in-out infinite alternate;
+}
+.blob-1 {
+  width: 400px; height: 400px;
+  background: var(--cyan);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+.blob-2 {
+  width: 350px; height: 350px;
+  background: var(--purple);
+  bottom: -80px; right: -80px;
+  animation-delay: -3s;
+}
+.blob-3 {
+  width: 300px; height: 300px;
+  background: var(--pink);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation-delay: -6s;
+}
+
+@keyframes blobFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(30px, -20px) scale(1.05); }
+  66%  { transform: translate(-20px, 30px) scale(0.95); }
+  100% { transform: translate(10px, -10px) scale(1.02); }
+}
+.blob-2 { animation-name: blobFloat2; }
+@keyframes blobFloat2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-30px, 20px) scale(1.08); }
+  100% { transform: translate(15px, -25px) scale(0.96); }
+}

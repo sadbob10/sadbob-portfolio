@@ -9,7 +9,7 @@ import { useCountUp } from '../../hooks/useCountUp';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import ParallaxLayer from '../ui/ParallaxLayer';
 import ParticleScene from '../../lib/three/ParticleScene';
-import MagneticButton from '../ui/MagneticButton';
+import RippleButton from '../ui/RippleButton';
 
 import '../../styles/hero.css';
 
@@ -160,16 +160,18 @@ export default function Hero(): ReactElement {
 
         {/* CTA Buttons */}
         <div className="btn-row">
-          <MagneticButton
-            className="btn-primary"
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+          <RippleButton
+            className="btn-primary ripple-wrap"
+            onClick={() =>
+              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+            }
           >
             See My Work <ArrowRight size={15} />
-          </MagneticButton>
+          </RippleButton>
 
-          <a href="mailto:abate.shallo@gmail.com" className="btn-outline">
+          <RippleButton href="mailto:abate.shallo@gmail.com" className="btn-outline">
             Let's Talk <Mail size={15} />
-          </a>
+          </RippleButton>
 
           <a
             href={CV_URL}
