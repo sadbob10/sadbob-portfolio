@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { MapPin, Calendar, Code2, Zap, Globe } from 'lucide-react';
 import '../../styles/about.css';
 import GithubStats from '../ui/GithubStats';
-import profilePhoto from '../../assets/profile.jpg'
+import profilePhoto from '../../assets/profile.jpg';
 
 export default function About(): ReactElement {
   return (
@@ -11,15 +11,8 @@ export default function About(): ReactElement {
       <p className="sec-tag">Who I Am</p>
       <h2 className="sec-title">About Me</h2>
 
-      <div
-        className="about-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '260px 1fr 1fr',
-          gap: '3.5rem',
-          alignItems: 'start',
-        }}
-      >
+      {/* Grid with class only - no inline styles */}
+      <div className="about-grid">
         {/* ── Premium Profile Card ── */}
         <div
           style={{
@@ -53,29 +46,17 @@ export default function About(): ReactElement {
                 border: '4px solid rgba(0,0,0,0.6)',
               }}
             >
-              {/* Replace with real photo when available */}
-             <div
-              style={{
-                   width:        '100%',
-    height:       '100%',
-    borderRadius: '50%',
-    overflow:     'hidden',
-    background:   'var(--bg3)',
-    border:       '4px solid rgba(0,0,0,0.6)',
-  }}
->
-  <img
-    src={profilePhoto}
-    alt="Sadam Abate"
-    style={{
-      width:           '100%',
-      height:          '100%',
-      objectFit:       'cover',
-      objectPosition:  'center top',
-      borderRadius:    '50%',
-    }}
-  />
-</div>
+              <img
+                src={profilePhoto}
+                alt="Sadam Abate"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center top',
+                  borderRadius: '50%',
+                }}
+              />
             </div>
 
             {/* Available Status Ring */}
@@ -181,7 +162,7 @@ export default function About(): ReactElement {
         </div>
 
         {/* ── Right: Code Card ── */}
-        <div className="code-card">
+        <div className="code-card about-code-card">
           <div className="code-bar">
             <div className="code-dot dot-r" />
             <div className="code-dot dot-y" />

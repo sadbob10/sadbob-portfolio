@@ -194,5 +194,13 @@
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .contact { padding: 5rem 1.4rem; }
-  .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .contact-form-wrap {
+    padding: 1.5rem;
+  }
 }
