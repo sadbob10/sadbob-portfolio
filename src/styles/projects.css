@@ -13,72 +13,67 @@
 }
 
 /* ── PROJECT CARD ── */
-/* ── PROJECT CARD — glassmorphism ── */
 .proj-card {
-  background: rgba(255,255,255,0.025);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.07);
+  /* Solid dark background — never transparent */
+  background: #0a041a;
   border-radius: 20px;
   padding: 1.8rem;
   cursor: default;
   position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  transform-style: preserve-3d;
   will-change: transform;
   opacity: 0;
   transform: translateY(24px);
+
+  /* Gradient border using background-clip trick — ONLY on border */
+  border: 1.5px solid rgba(255,255,255,0.08);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s, border-color 0.3s;
 }
+
 .proj-card.visible {
   opacity: 1;
   transform: translateY(0);
   transition:
-    opacity 0.6s var(--ease),
-    transform 0.6s var(--ease),
-    border-color 0.3s,
-    box-shadow 0.3s;
+    opacity    0.6s var(--ease),
+    transform  0.6s var(--ease),
+    box-shadow 0.3s,
+    border-color 0.3s;
 }
 
-/* Animated gradient border on hover */
+/* Hover — subtle glow only on border/shadow, NO background change */
+.proj-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(162, 89, 255, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(162, 89, 255, 0.15),
+    0 20px 45px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(162, 89, 255, 0.08);
+}
+
+/* Top accent line — appears on hover */
 .proj-card::before {
   content: '';
   position: absolute;
-  inset: -1.5px;
-  border-radius: 21px;
-  background: linear-gradient(125deg, var(--cyan), var(--purple), var(--pink), var(--cyan));
-  background-size: 300% 300%;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
   opacity: 0;
-  z-index: -1;
-  transition: opacity 0.35s;
-  animation: gradBorderSpin 4s linear infinite;
+  transition: opacity 0.3s;
 }
 .proj-card:hover::before { opacity: 1; }
 
-/* Spotlight — follows cursor */
-.proj-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(
-    380px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(162,89,255,0.1) 0%,
-    rgba(0,229,255,0.05) 35%,
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
+/* ── ALL text above everything ── */
+.proj-emoji,
+.proj-meta,
+.proj-title,
+.proj-desc,
+.proj-tech,
+.proj-links,
+.proj-featured,
+.proj-nda {
+  position: relative;
+  z-index: 1;
 }
-.proj-card:hover {
-  border-color: rgba(162,89,255,0.2);
-  box-shadow:
-    0 25px 50px rgba(0,0,0,0.4),
-    0 0 30px rgba(162,89,255,0.1);
-  transform: translateY(-6px);
-}
-.proj-card:hover::after { opacity: 1; }
 
 /* ── CARD HEADER ── */
 .proj-emoji {
@@ -154,8 +149,9 @@
   transition: all 0.2s;
 }
 .tech-tag:hover {
-  border-color: rgba(162,89,255,0.3);
+  border-color: rgba(162,89,255,0.35);
   color: #c084fc;
+  background: rgba(162,89,255,0.06);
 }
 
 /* ── CARD LINKS ── */
@@ -172,21 +168,20 @@
   font: 600 0.82rem/1 var(--font-body);
   color: var(--cyan);
   text-decoration: none;
-  transition: gap 0.2s, opacity 0.2s;
+  transition: gap 0.2s, color 0.2s;
 }
-.proj-link:hover { gap: 0.55rem; }
+.proj-link:hover { gap: 0.6rem; color: var(--white); }
 .proj-link.disabled {
   color: var(--muted);
   cursor: not-allowed;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
 /* ── FEATURED BADGE ── */
 .proj-featured {
   position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
+  top: 1.2rem; right: 1.2rem;
   font: 0.65rem/1 var(--font-mono);
   color: #ffd166;
   background: rgba(255,201,77,0.08);
@@ -194,10 +189,11 @@
   padding: 0.22rem 0.65rem;
   border-radius: 100px;
   letter-spacing: 0.05em;
+  z-index: 2;
 }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .projects { padding: 5rem 1.4rem; }
+  .projects      { padding: 5rem 1.4rem; }
   .projects-grid { grid-template-columns: 1fr; }
 }

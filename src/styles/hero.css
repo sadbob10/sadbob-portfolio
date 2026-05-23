@@ -194,7 +194,6 @@
   letter-spacing: .015em;
 }
 .btn-primary:hover {
-  transform: translateY(-3px);
   box-shadow: 0 14px 40px rgba(0,229,255,.28);
 }
 .btn-outline {

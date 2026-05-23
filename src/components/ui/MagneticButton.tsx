@@ -1,20 +1,22 @@
 import { useRef, useState } from 'react'
-import type { ReactElement, ReactNode, MouseEvent } from 'react'
+import type { ReactElement, ReactNode, MouseEvent, CSSProperties } from 'react'
 
 interface Props {
-  children: ReactNode
+  children:   ReactNode
   className?: string
-  onClick?: () => void
-  strength?: number
-  type?: 'button' | 'submit'
+  onClick?:   () => void
+  strength?:  number
+  type?:      'button' | 'submit'
+  style?:     CSSProperties    // ← add this
 }
 
 export default function MagneticButton({
   children,
   className = '',
   onClick,
-  strength = 0.35,
-  type = 'button',
+  strength  = 0.45,
+  type      = 'button',
+  style,                       // ← destructure it
 }: Props): ReactElement {
   const ref  = useRef<HTMLButtonElement>(null)
   const [pos, setPos] = useState({ x: 0, y: 0 })
@@ -42,7 +44,8 @@ export default function MagneticButton({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{
-        transform:  `translate(${pos.x}px, ${pos.y}px)`,
+        ...style,                // ← spread passed style
+        transform: `translate(${pos.x}px, ${pos.y}px)`,
         transition: pos.x === 0 && pos.y === 0
           ? 'transform 0.5s cubic-bezier(0.16,1,0.3,1)'
           : 'transform 0.1s ease',
