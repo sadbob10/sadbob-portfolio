@@ -4,11 +4,15 @@ import { SKILLS, SKILL_CATEGORIES } from '../../data/skills';
 import type { Skill, SkillCategory } from '../../data/skills';
 import '../../styles/skills.css';
 import SplitText from '../ui/SplitText';
+import { useGSAPStagger } from '../../hooks/useGSAP';
 
 export default function Skills(): ReactElement {
   const [active, setActive] = useState<SkillCategory>('All');
   const [visible, setVisible] = useState<Set<string>>(new Set());
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // GSAP Stagger for skills grid
+  const gridRef = useGSAPStagger(0.05, 0.1);
 
   // Filter skills
   const filtered: Skill[] = active === 'All'
@@ -72,7 +76,7 @@ export default function Skills(): ReactElement {
         </div>
 
         {/* Skills grid */}
-        <div className="skills-grid">
+        <div className="skills-grid" ref={gridRef as any}>
           {filtered.map((skill: Skill, i: number) => {
             const key = skill.name;
             const isVisible = visible.has(key);

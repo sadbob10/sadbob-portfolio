@@ -3,7 +3,8 @@ import type { ReactElement, FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import { Mail, Send, Loader } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
-import SplitText from '../ui/SplitText'
+import SplitText from '../ui/SplitText';
+import { useGSAPFade, useGSAPStagger } from '../../hooks/useGSAP';
 import '../../styles/contact.css';
 
 interface FormState {
@@ -21,6 +22,11 @@ export default function Contact(): ReactElement {
     message: '',
   });
   const [status, setStatus] = useState<Status>('idle');
+
+  // GSAP Animations
+  const leftRef = useGSAPFade('left', 0.1);
+  const rightRef = useGSAPFade('right', 0.2);
+  const linksRef = useGSAPStagger(0.1, 0.3);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -48,7 +54,6 @@ export default function Contact(): ReactElement {
       setStatus('success');
       setForm({ name: '', email: '', message: '' });
 
-      // Optional: Reset status after 5 seconds
       setTimeout(() => setStatus('idle'), 5000);
     } catch {
       setStatus('error');
@@ -64,14 +69,14 @@ export default function Contact(): ReactElement {
         {/* Header */}
         <p className="mono-label">Get In Touch</p>
         <div className="section-heading">
-          <SplitText text="Let's"  className="word-accent" staggerMs={55} />
-          <SplitText text=" Build" className="word-plain"  staggerMs={55} delayMs={200} />
+          <SplitText text="Let's" className="word-accent" staggerMs={55} />
+          <SplitText text=" Build" className="word-plain" staggerMs={55} delayMs={200} />
           <SplitText text=" Together" className="word-plain" staggerMs={45} delayMs={400} />
         </div>
 
         <div className="contact-grid">
           {/* Left: Info */}
-          <div className="contact-info">
+          <div className="contact-info" ref={leftRef}>
             <p>
               Have a project in mind? Looking for a reliable{' '}
               <strong>full stack developer</strong>? I'm currently
@@ -80,7 +85,7 @@ export default function Contact(): ReactElement {
               Let's create something great.
             </p>
 
-            <div className="contact-items">
+            <div className="contact-items" ref={linksRef as any}>
               <a href="mailto:abate.shallo@gmail.com" className="contact-item">
                 <div className="ci-icon">
                   <Mail size={17} />
@@ -124,7 +129,7 @@ export default function Contact(): ReactElement {
           </div>
 
           {/* Right: Form */}
-          <div className="contact-form-wrap">
+          <div className="contact-form-wrap" ref={rightRef}>
             <h3 className="form-title">Send a Message 👋</h3>
             <p className="form-sub">I reply within 24 hours. Don't hesitate!</p>
 

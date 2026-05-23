@@ -21,22 +21,10 @@
   cursor: default;
   position: relative;
   will-change: transform;
-  opacity: 0;
-  transform: translateY(24px);
 
   /* Gradient border using background-clip trick — ONLY on border */
   border: 1.5px solid rgba(255,255,255,0.08);
   transition: transform 0.3s var(--ease), box-shadow 0.3s, border-color 0.3s;
-}
-
-.proj-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity    0.6s var(--ease),
-    transform  0.6s var(--ease),
-    box-shadow 0.3s,
-    border-color 0.3s;
 }
 
 /* Hover — subtle glow only on border/shadow, NO background change */

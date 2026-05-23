@@ -1,43 +1,25 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import type { ReactElement } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { GithubIcon } from '../ui/Icons';
 import { PROJECTS, PROJECT_FILTERS } from '../../data/projects';
 import type { Project, ProjectFilter } from '../../data/projects';
 import SplitText from '../ui/SplitText';
+import { useGSAPStagger } from '../../hooks/useGSAP';
 import '../../styles/projects.css';
 
 export default function Projects(): ReactElement {
   const [active, setActive] = useState<ProjectFilter>('All');
-  const [visible, setVisible] = useState<Set<string>>(new Set());
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // GSAP Stagger for project cards
+  const gridRef = useGSAPStagger(0.1, 0, '.proj-card');
 
   // Filter projects
   const filtered: Project[] =
     active === 'All'
       ? PROJECTS
       : PROJECTS.filter((p) => p.type === active);
-
-  // Scroll reveal
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = (entry.target as HTMLElement).dataset.id ?? '';
-            setVisible((prev) => new Set([...prev, id]));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    cardRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [active]); // Better to depend on `active` instead of `filtered`
 
   // 3D tilt on mouse move
   const handleMouseMove = (
@@ -71,8 +53,8 @@ export default function Projects(): ReactElement {
         {/* Header */}
         <p className="mono-label">Portfolio</p>
         <div className="section-heading">
-          <SplitText text="Featured"  className="word-accent" staggerMs={45} />
-          <SplitText text=" Projects" className="word-plain"  staggerMs={45} delayMs={300} />
+          <SplitText text="Featured" className="word-accent" staggerMs={45} />
+          <SplitText text=" Projects" className="word-plain" staggerMs={45} delayMs={300} />
         </div>
         <p className="sec-sub">
           Enterprise systems powering real banks.
@@ -95,7 +77,7 @@ export default function Projects(): ReactElement {
         </div>
 
         {/* Cards grid */}
-        <div className="projects-grid">
+        <div className="projects-grid" ref={gridRef as any}>
           {filtered.map((project: Project, i: number) => (
             <div
               key={project.id}
@@ -103,7 +85,7 @@ export default function Projects(): ReactElement {
               ref={(el) => {
                 if (el) cardRefs.current.set(project.id, el);
               }}
-              className={`proj-card${visible.has(project.id) ? ' visible' : ''}`}
+              className="proj-card"
               style={{ transitionDelay: `${(i % 3) * 0.1}s` }}
               onMouseMove={(e) => {
                 const el = cardRefs.current.get(project.id);

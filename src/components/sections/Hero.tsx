@@ -11,6 +11,8 @@ import ParallaxLayer from '../ui/ParallaxLayer';
 import ParticleScene from '../../lib/three/ParticleScene';
 import RippleButton    from '../ui/RippleButton'
 import MagneticButton  from '../ui/MagneticButton'
+import TextReveal from '../ui/TextReveal'
+
 import '../../styles/hero.css';
 
 const CV_URL = 'https://drive.google.com/uc?export=download&id=1D7aJmS9sViElkp5qz81a489JlX7lHGiC';
@@ -151,12 +153,13 @@ export default function Hero(): ReactElement {
         </div>
 
         {/* Description */}
-        <p className="h-desc">
-          Building <strong>enterprise-grade</strong> systems that power{' '}
-          <em>Ethiopian banks</em> and real businesses. Expert in{' '}
-          <strong>React + Spring Boot</strong> full-stack development and{' '}
-          <strong>React Native</strong> mobile apps.
-        </p>
+        <TextReveal
+          text="Building enterprise-grade systems that power Ethiopian banks and real businesses. Expert in React + Spring Boot full-stack development and React Native mobile apps."
+          className="h-desc"
+          delay={0.3}
+          stagger={0.04}
+        />
+
 
         {/* CTA Buttons */}
         <div className="btn-row">

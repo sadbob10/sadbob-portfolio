@@ -4,8 +4,15 @@ import '../../styles/about.css';
 import GithubStats from '../ui/GithubStats';
 import profilePhoto from '../../assets/profile.jpg';
 import SplitText from '../ui/SplitText';
+import { useGSAPStagger, useGSAPFade } from '../../hooks/useGSAP';
+import TextReveal from '../ui/TextReveal';
 
 export default function About(): ReactElement {
+  // GSAP Stagger & Fade hooks
+  const pillsRef = useGSAPStagger(0.1, 0.2);
+  const statsRef = useGSAPStagger(0.12, 0.3);
+  const codeRef = useGSAPFade('right', 0.2);
+
   return (
     <section className="about" id="about" style={{ position: 'relative', overflow: 'hidden' }}>
       {/* ── Gradient blob background ── */}
@@ -132,14 +139,7 @@ export default function About(): ReactElement {
             </div>
 
             {/* Quick Info Pills */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.65rem',
-                width: '100%',
-              }}
-            >
+            <div ref={pillsRef} style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', width: '100%' }}>
               {[
                 { icon: MapPin, text: 'Addis Ababa, Ethiopia' },
                 { icon: Zap, text: 'Available for opportunities' },
@@ -171,30 +171,26 @@ export default function About(): ReactElement {
 
           {/* ── Middle: Text Content ── */}
           <div className="about-text">
-            <p>
-              I'm <strong>Sadam Abate</strong>, a full stack developer based in{' '}
-              <em>Addis Ababa, Ethiopia 🇪🇹</em>. I specialize in building
-              robust, scalable enterprise applications using{' '}
-              <strong>React + Vite</strong> on the frontend and{' '}
-              <strong>Spring Boot + Java</strong> on the backend.
-            </p>
-            <p>
-              My work includes building critical banking infrastructure for
-              Ethiopian financial institutions — systems that handle{' '}
-              <strong>real money</strong>, real users, and real responsibility.
-              I care deeply about clean architecture,{' '}
-              <strong>system performance</strong>, and developer experience.
-            </p>
-            <p>
-              Outside enterprise work, I build personal projects that blend
-              creativity with technology — a <em>tri-calendar converter</em>{' '}
-              celebrating Ethiopian culture, a Telegram bot, and an{' '}
-              <em>AI-powered roast app</em> that keeps things fun.
-              More projects coming soon.
-            </p>
+            <TextReveal
+              text="I'm Sadam Abate, a full stack developer based in Addis Ababa, Ethiopia. I specialize in building robust, scalable enterprise applications using React + Vite on the frontend and Spring Boot + Java on the backend."
+              className="about-p"
+              stagger={0.035}
+            />
+            <TextReveal
+              text="My work includes building critical banking infrastructure for Ethiopian financial institutions — systems that handle real money, real users, and real responsibility."
+              className="about-p"
+              delay={0.1}
+              stagger={0.03}
+            />
+            <TextReveal
+              text="Outside enterprise work, I build personal projects that blend creativity with technology — a tri-calendar converter celebrating Ethiopian culture, a Telegram bot, and an AI-powered roast app that keeps things fun. More projects coming soon."
+              className="about-p"
+              delay={0.2}
+              stagger={0.035}
+            />
 
             {/* Mini stats */}
-            <div className="about-stats">
+            <div className="about-stats" ref={statsRef}>
               <div className="about-stat">
                 <div className="about-stat-n grad-text">3+</div>
                 <div className="about-stat-l">Years Exp.</div>
@@ -218,7 +214,7 @@ export default function About(): ReactElement {
           </div>
 
           {/* ── Right: Code Card ── */}
-          <div className="code-card about-code-card">
+          <div className="code-card about-code-card" ref={codeRef}>
             <div className="code-bar">
               <div className="code-dot dot-r" />
               <div className="code-dot dot-y" />
