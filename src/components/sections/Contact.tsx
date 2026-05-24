@@ -26,7 +26,7 @@ export default function Contact(): ReactElement {
   // GSAP Animations
   const leftRef = useGSAPFade('left', 0.1);
   const rightRef = useGSAPFade('right', 0.2);
-  const linksRef = useGSAPStagger(0.1, 0.3);
+  const linksRef = useGSAPStagger(0.12, 0.2);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -76,7 +76,7 @@ export default function Contact(): ReactElement {
 
         <div className="contact-grid">
           {/* Left: Info */}
-          <div className="contact-info" ref={leftRef}>
+          <div className="contact-info" ref={leftRef as React.RefObject<HTMLDivElement>}>
             <p>
               Have a project in mind? Looking for a reliable{' '}
               <strong>full stack developer</strong>? I'm currently
@@ -85,7 +85,7 @@ export default function Contact(): ReactElement {
               Let's create something great.
             </p>
 
-            <div className="contact-items" ref={linksRef as any}>
+            <div className="contact-items" ref={linksRef as React.RefObject<HTMLDivElement>}>
               <a href="mailto:abate.shallo@gmail.com" className="contact-item">
                 <div className="ci-icon">
                   <Mail size={17} />
@@ -129,7 +129,7 @@ export default function Contact(): ReactElement {
           </div>
 
           {/* Right: Form */}
-          <div className="contact-form-wrap" ref={rightRef}>
+          <div className="contact-form-wrap" ref={rightRef as React.RefObject<HTMLDivElement>}>
             <h3 className="form-title">Send a Message 👋</h3>
             <p className="form-sub">I reply within 24 hours. Don't hesitate!</p>
 

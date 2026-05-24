@@ -19,13 +19,14 @@ export function useGSAPFade(
     if (!el) return
 
     const from: gsap.TweenVars = {
-      opacity:  0,
-      duration: 0.9,
+      opacity:         0,
+      duration:        0.9,
       delay,
-      ease:     'power3.out',
+      ease:            'power3.out',
+      immediateRender: false,   // ✅ don't hide on mount
       scrollTrigger: {
         trigger: el,
-        start:   'top 88%',
+        start:   'top 92%',     // ✅ trigger earlier
         once:    true,
       },
     }
@@ -37,8 +38,6 @@ export function useGSAPFade(
     if (dir === 'scale') { from.scale = 0.85  }
 
     const anim = gsap.from(el, from)
-
-    // ✅ Wrap in {} so nothing is returned (void)
     return () => { anim.kill() }
   }, [dir, delay, distance])
 
@@ -61,27 +60,27 @@ export function useGSAPStagger(
     if (!children.length) return
 
     const anim = gsap.from(children, {
-      y:        40,
-      opacity:  0,
-      duration: 0.7,
+      y:               40,
+      opacity:         0,
+      duration:        0.7,
       stagger,
       delay,
-      ease:     'power3.out',
+      ease:            'power3.out',
+      immediateRender: false,
       scrollTrigger: {
         trigger: el,
-        start:   'top 85%',
+        start:   'top 92%',
         once:    true,
       },
     })
 
-    // ✅ Wrap in {} — void return
     return () => { anim.kill() }
   }, [stagger, delay, selector])
 
   return ref
 }
 
-/* ── Draw a line (scaleY from 0 to 1) ── */
+/* ── Draw a line ── */
 export function useGSAPLineDraw() {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -94,14 +93,14 @@ export function useGSAPLineDraw() {
       transformOrigin: 'top center',
       duration:        2,
       ease:            'power2.out',
+      immediateRender: false,
       scrollTrigger: {
         trigger: el,
-        start:   'top 80%',
+        start:   'top 85%',
         once:    true,
       },
     })
 
-    // ✅ Wrap in {} — void return
     return () => { anim.kill() }
   }, [])
 
@@ -123,7 +122,7 @@ export function useGSAPCounter(target: number, duration: number = 2) {
       ease:     'power2.out',
       scrollTrigger: {
         trigger: el,
-        start:   'top 85%',
+        start:   'top 92%',
         once:    true,
       },
       onUpdate: () => {
@@ -131,7 +130,6 @@ export function useGSAPCounter(target: number, duration: number = 2) {
       },
     })
 
-    // ✅ Wrap in {} — void return
     return () => { anim.kill() }
   }, [target, duration])
 

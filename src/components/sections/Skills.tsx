@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { SKILLS, SKILL_CATEGORIES } from '../../data/skills';
 import type { Skill, SkillCategory } from '../../data/skills';
@@ -8,37 +8,14 @@ import { useGSAPStagger } from '../../hooks/useGSAP';
 
 export default function Skills(): ReactElement {
   const [active, setActive] = useState<SkillCategory>('All');
-  const [visible, setVisible] = useState<Set<string>>(new Set());
-  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // GSAP Stagger for skills grid
-  const gridRef = useGSAPStagger(0.05, 0.1);
+  const gridRef = useGSAPStagger(0.06, 0.1);
 
   // Filter skills
   const filtered: Skill[] = active === 'All'
     ? SKILLS
     : SKILLS.filter((s) => s.category === active);
-
-  // Scroll reveal for cards
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const key = (entry.target as HTMLElement).dataset.key ?? '';
-            setVisible((prev) => new Set([...prev, key]));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    cardRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [filtered]);
 
   return (
     <>
@@ -75,34 +52,25 @@ export default function Skills(): ReactElement {
           ))}
         </div>
 
-        {/* Skills grid */}
-        <div className="skills-grid" ref={gridRef as any}>
-          {filtered.map((skill: Skill, i: number) => {
-            const key = skill.name;
-            const isVisible = visible.has(key);
-
-            return (
-              <div
-                key={key}
-                data-key={key}
-                ref={(el) => {
-                  if (el) cardRefs.current.set(key, el);
-                }}
-                className={`skill-card${isVisible ? ' visible' : ''}`}
-                style={{
-                  transitionDelay: `${(i % 8) * 0.06}s`,
-                  '--level': `${skill.level}%`,
-                } as React.CSSProperties}
-              >
-                <span className="skill-icon">{skill.icon}</span>
-                <div className="skill-name">{skill.name}</div>
-                <div className="skill-cat">{skill.category}</div>
-                <div className="skill-bar-bg">
-                  <div className="skill-bar-fill" />
-                </div>
+        {/* Skills grid — GSAP stagger applied */}
+        <div
+          className="skills-grid"
+          ref={gridRef as React.RefObject<HTMLDivElement>}
+        >
+          {filtered.map((skill: Skill) => (
+            <div
+              key={skill.name}
+              className="skill-card"
+              style={{ '--level': `${skill.level}%` } as React.CSSProperties}
+            >
+              <span className="skill-icon">{skill.icon}</span>
+              <div className="skill-name">{skill.name}</div>
+              <div className="skill-cat">{skill.category}</div>
+              <div className="skill-bar-bg">
+                <div className="skill-bar-fill" />
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </section>
     </>
