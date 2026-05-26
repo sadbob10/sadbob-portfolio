@@ -15,6 +15,7 @@ import ScrollProgress from './components/ui/ScrollProgress';
 import Marquee from './components/ui/Marquee';
 import CommandPalette from './components/ui/CommandPalette';
 import { useLenis } from './hooks/useLenis';
+import AIChatAssistant from './components/ui/AIChatAssistant';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,7 +45,6 @@ function App() {
 
       {loading && <Preloader onDone={handleDone} />}
 
-      {/* ✅ Fixed: Use opacity instead of visibility for better IntersectionObserver support */}
       <main
         style={{
           opacity: loading ? 0 : 1,
@@ -81,6 +81,9 @@ function App() {
           <Footer />
         </RevealSection>
       </main>
+
+      {/* AI Chat Assistant */}
+      <AIChatAssistant />
     </>
   );
 }

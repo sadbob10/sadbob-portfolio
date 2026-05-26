@@ -212,7 +212,7 @@ export default function About(): ReactElement {
                 <div className="about-stat-l">Projects</div>
               </div>
               <div className="about-stat">
-                <div className="about-stat-n grad-text">2</div>
+                <div className="about-stat-n grad-text">4+</div>
                 <div className="about-stat-l">Banks</div>
               </div>
             </div>
