@@ -25,23 +25,21 @@ Other: Telegram Bot API, AI/LLM Integration
 1. Enat Bank Backoffice (Enterprise)
    - Full backoffice management system for Enat Bank
    - Tech: React, Vite, Spring Boot, PostgreSQL, Java
-   - Features: RBAC, audit trails, real-time dashboards
    - Status: Delivered (NDA — private)
 
 2. Shebelle Bank Backoffice (Enterprise)
    - Complete banking backoffice platform for Shebelle Bank
    - Tech: React, Vite, Spring Boot, MySQL, Java
-   - Features: Transaction management, compliance workflows
    - Status: Delivered (NDA — private)
 
 3. Bulk SMS Platform (Enterprise)
-   - High-throughput SMS broadcasting system for banks
+   - High-throughput SMS broadcasting for banks
    - Tech: Spring Boot, Java, React, MySQL
    - Status: Delivered (NDA — private)
 
 4. Calendar Converter (Personal)
    - Converts between Ethiopian, Gregorian and Hijri calendars
-   - Includes Telegram Bot integration
+   - Telegram Bot integration included
    - Tech: React, Vite, Spring Boot, Java, Telegram Bot API
    - GitHub: github.com/sadbob10
 
@@ -51,7 +49,7 @@ Other: Telegram Bot API, AI/LLM Integration
    - GitHub: github.com/sadbob10
 
 6. SymptoAI (In Progress)
-   - AI-powered healthcare app — disease prediction, doctor appointments, telemedicine
+   - AI-powered healthcare — disease prediction, doctor appointments
    - Tech: React Native, TypeScript, Node.js, PostgreSQL, AI/ML
 
 == PERSONALITY ==
@@ -64,8 +62,8 @@ Other: Telegram Bot API, AI/LLM Integration
 == RESPONSE RULES ==
 - Keep responses concise and friendly (2-4 sentences max)
 - Use emojis occasionally to match the portfolio vibe
-- If asked about availability, confirm he IS available and suggest emailing abate.shallo@gmail.com
-- If you don't know something, admit it and suggest contacting Sadam directly
+- If asked about availability confirm he IS available and suggest emailing abate.shallo@gmail.com
+- If you do not know something admit it and suggest contacting Sadam directly
 - Never make up fake projects or skills
 - Always encourage reaching out via email or LinkedIn`
 
@@ -74,20 +72,20 @@ export default async function handler(
   res: VercelResponse
 ): Promise<void> {
 
-  // Only POST allowed
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' })
+  // ✅ Set CORS headers on EVERY response
+  res.setHeader('Access-Control-Allow-Origin',  '*')
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+  // ✅ Handle preflight FIRST — before any method checks
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
     return
   }
 
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin',  '*')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
+  // Only allow POST after OPTIONS
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' })
     return
   }
 
@@ -98,6 +96,11 @@ export default async function handler(
     return
   }
 
+  if (!process.env.GROQ_API_KEY) {
+    res.status(500).json({ error: 'API key not configured' })
+    return
+  }
+
   try {
     const response = await fetch(
       'https://api.groq.com/openai/v1/chat/completions',
@@ -105,10 +108,10 @@ export default async function handler(
         method: 'POST',
         headers: {
           'Content-Type':  'application/json',
-          'Authorization': `Bearer ${process.env.GROQ_API_KEY ?? ''}`,
+          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model:       'llama3-8b-8192',   // fast, free, great quality
+          model:       'llama3-8b-8192',
           max_tokens:  400,
           temperature: 0.7,
           messages: [
@@ -125,21 +128,22 @@ export default async function handler(
     const data = await response.json()
 
     if (!response.ok) {
-      console.error('Groq API error:', data)
-      res.status(500).json({ error: 'Groq API error', details: data })
+      console.error('Groq error:', data)
+      res.status(500).json({
+        content: "I'm having trouble right now. Please email Sadam at abate.shallo@gmail.com 📧"
+      })
       return
     }
 
     const content = data.choices?.[0]?.message?.content
-      ?? "Sorry, I couldn't generate a response right now."
+      ?? "Sorry, I couldn't generate a response. Please try again!"
 
     res.status(200).json({ content })
 
   } catch (error) {
     console.error('Chat error:', error)
     res.status(500).json({
-      error: 'Connection failed',
-      content: "I'm having trouble connecting right now. Please email Sadam directly at abate.shallo@gmail.com 📧",
+      content: "Connection error. Please reach out directly at abate.shallo@gmail.com 📧"
     })
   }
 }
