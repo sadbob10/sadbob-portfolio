@@ -1,12 +1,10 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-
 const SYSTEM_PROMPT = `You are an AI assistant for Sadam Abate's personal portfolio website.
 Your job is to help visitors learn about Sadam, his skills, projects, and how to contact him.
 
 == ABOUT SADAM ==
 Name: Sadam Abate (nickname: sadbob)
 Role: Full Stack Developer
-Location: Addis Ababa, Ethiopia 🇪🇹
+Location: Addis Ababa, Ethiopia
 Experience: 3+ years
 Available: Yes — open to freelance and full-time opportunities
 Email: abate.shallo@gmail.com
@@ -22,25 +20,21 @@ DevOps: Docker, Git, Linux
 Other: Telegram Bot API, AI/LLM Integration
 
 == PROJECTS ==
-1. Enat Bank Backoffice — Enterprise banking backoffice (NDA)
-2. Shebelle Bank Backoffice — Enterprise banking platform (NDA)
-3. Bulk SMS Platform — Bank SMS broadcasting system (NDA)
+1. Enat Bank Backoffice — Enterprise banking system (NDA)
+2. Shebelle Bank Backoffice — Banking platform (NDA)
+3. Bulk SMS Platform — Bank SMS system (NDA)
 4. Calendar Converter — Ethiopian/Gregorian/Hijri converter + Telegram bot
 5. Roast My Life — AI-powered React Native roast app
-6. SymptoAI — AI healthcare app (in progress)
+6. SymptoAI — AI healthcare app in progress
 
 == RESPONSE RULES ==
 - Keep responses short and friendly (2-4 sentences)
 - Use emojis occasionally
-- Confirm he is available for work — suggest emailing abate.shallo@gmail.com
+- Confirm he IS available — suggest emailing abate.shallo@gmail.com
 - Never make up information`
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
-
-  res.setHeader('Access-Control-Allow-Origin',  '*')
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
@@ -73,12 +67,12 @@ export default async function handler(
       {
         method: 'POST',
         headers: {
-          'Content-Type':  'application/json',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model:       'llama3-8b-8192',
-          max_tokens:  400,
+          model: 'llama3-8b-8192',
+          max_tokens: 400,
           temperature: 0.7,
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
@@ -94,9 +88,10 @@ export default async function handler(
 
     res.status(200).json({ content })
 
-  } catch {
+  } catch (err) {
+    console.error(err)
     res.status(500).json({
-      content: "I'm having trouble connecting. Please email Sadam at abate.shallo@gmail.com 📧"
+      content: "Connection error. Please email Sadam at abate.shallo@gmail.com"
     })
   }
 }
