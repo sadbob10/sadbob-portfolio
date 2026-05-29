@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
-    res.status(500).json({ content: 'API not configured.' })
+    res.status(500).json({ content: 'API key not configured on server.' })
     return
   }
 
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'llama3-8b-8192',
+          model: 'llama-3.1-8b-instant',   // ← updated model name
           max_tokens: 400,
           temperature: 0.7,
           messages: [
@@ -83,13 +83,32 @@ export default async function handler(req, res) {
     )
 
     const data = await groqRes.json()
+
+    // ✅ Log full response for debugging
+    console.log('Groq status:', groqRes.status)
+    console.log('Groq response:', JSON.stringify(data))
+
+    // ✅ Check for Groq API errors
+    if (!groqRes.ok) {
+      console.error('Groq error:', data.error)
+      res.status(500).json({
+        content: `API error: ${data.error?.message ?? 'Unknown error'}`
+      })
+      return
+    }
+
     const content = data.choices?.[0]?.message?.content
-      ?? 'Sorry, could not generate a response.'
+
+    if (!content) {
+      console.error('No content in response:', data)
+      res.status(500).json({ content: 'Empty response from AI.' })
+      return
+    }
 
     res.status(200).json({ content })
 
   } catch (err) {
-    console.error(err)
+    console.error('Fetch error:', err)
     res.status(500).json({
       content: "Connection error. Please email Sadam at abate.shallo@gmail.com"
     })
