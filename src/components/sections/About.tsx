@@ -5,8 +5,12 @@ import GithubStats from '../ui/GithubStats';
 import profilePhoto from '../../assets/profile.jpg';
 import SplitText from '../ui/SplitText';
 import { useGSAPStagger, useGSAPFade } from '../../hooks/useGSAP';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function About(): ReactElement {
+  const { t } = useTranslation();
+  const a = t.about;
+
   // GSAP Animations
   const pillsRef = useGSAPStagger(0.1, 0.2);
   const textRef = useGSAPFade('up', 0.1);
@@ -66,12 +70,12 @@ export default function About(): ReactElement {
       {/* ── All existing content wrapped with relative positioning ── */}
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Header */}
-        <p className="mono-label">Who I Am</p>
+        <p className="mono-label">{a.tag}</p>
 
         {/* Updated SplitText Title */}
         <div className="section-heading">
-          <SplitText text="About" className="word-accent" staggerMs={55} />
-          <SplitText text=" Me" className="word-plain" staggerMs={55} delayMs={250} />
+          <SplitText text={a.title1} className="word-accent" staggerMs={55} />
+          <SplitText text={a.title2} className="word-plain" staggerMs={55} delayMs={250} />
         </div>
 
         {/* Grid with class only - no inline styles */}
@@ -149,10 +153,10 @@ export default function About(): ReactElement {
               }}
             >
               {[
-                { icon: MapPin, text: 'Addis Ababa, Ethiopia' },
-                { icon: Zap, text: 'Available for opportunities' },
-                { icon: Globe, text: 'Remote & On-site' },
-                { icon: Calendar, text: 'Available immediately' },
+                { icon: MapPin, text: a.pills.location },
+                { icon: Zap, text: a.pills.available },
+                { icon: Globe, text: a.pills.remote },
+                { icon: Calendar, text: a.pills.immediate },
               ].map(({ icon: Icon, text }) => (
                 <div
                   key={text}
@@ -179,47 +183,29 @@ export default function About(): ReactElement {
 
           {/* ── Middle: Text Content ── */}
           <div className="about-text" ref={textRef as React.RefObject<HTMLDivElement>}>
-            <p>
-              I'm <strong>Sadam Abate</strong>, a full stack developer based in{' '}
-              <em>Addis Ababa, Ethiopia 🇪🇹</em>. I specialize in building
-              robust, scalable enterprise applications using{' '}
-              <strong>React + Vite</strong> on the frontend and{' '}
-              <strong>Spring Boot + Java</strong> on the backend.
-            </p>
-            <p>
-              My work includes building critical banking infrastructure for
-              Ethiopian financial institutions — systems that handle{' '}
-              <strong>real money</strong>, real users, and real responsibility.
-              I care deeply about clean architecture,{' '}
-              <strong>system performance</strong>, and developer experience.
-            </p>
-            <p>
-              Outside enterprise work, I build personal projects that blend
-              creativity with technology — a <em>tri-calendar converter</em>{' '}
-              celebrating Ethiopian culture, a Telegram bot, and an{' '}
-              <em>AI-powered roast app</em> that keeps things fun.
-              More projects coming soon.
-            </p>
+            <p>{a.p1}</p>
+            <p>{a.p2}</p>
+            <p>{a.p3}</p>
 
             {/* Mini stats */}
             <div className="about-stats" ref={statsRef as React.RefObject<HTMLDivElement>}>
               <div className="about-stat">
                 <div className="about-stat-n grad-text">3+</div>
-                <div className="about-stat-l">Years Exp.</div>
+                <div className="about-stat-l">{a.stats.years}</div>
               </div>
               <div className="about-stat">
                 <div className="about-stat-n grad-text">5+</div>
-                <div className="about-stat-l">Projects</div>
+                <div className="about-stat-l">{a.stats.projects}</div>
               </div>
               <div className="about-stat">
-                <div className="about-stat-n grad-text">4+</div>
-                <div className="about-stat-l">Banks</div>
+                <div className="about-stat-n grad-text">2</div>
+                <div className="about-stat-l">{a.stats.banks}</div>
               </div>
             </div>
 
             <div className="avail-badge" style={{ marginTop: '2rem' }}>
               <span className="avail-dot" />
-              Available for freelance and full-time roles
+              {a.badge}
             </div>
 
             <GithubStats />

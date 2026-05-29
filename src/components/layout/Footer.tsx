@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import type { ReactElement } from 'react';
 import { Mail, ChevronUp } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
-import '../../styles/footer.css'
+import { useTranslation } from '../../hooks/useTranslation';
+import '../../styles/footer.css';
 
 export default function Footer(): ReactElement {
   const [showTop, setShowTop] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const onScroll = (): void => {
@@ -40,12 +42,10 @@ export default function Footer(): ReactElement {
           {/* Center Info */}
           <div className="footer-center">
             <p className="footer-copy">
-              Designed & built by <span>Sadam Abate</span> ·{' '}
-              <em>@sadbob</em> · {new Date().getFullYear()}
+              {t.footer.designed}{' '}
+              <span>Sadam Abate</span> · <em>@sadbob</em> · {new Date().getFullYear()}
             </p>
-            <p className="footer-made">
-              crafted with ❤️ from addis ababa, ethiopia 🇪🇹
-            </p>
+            <p className="footer-made">{t.footer.crafted}</p>
           </div>
 
           {/* Social Links */}

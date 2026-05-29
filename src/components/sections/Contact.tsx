@@ -5,6 +5,7 @@ import { Mail, Send, Loader } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import SplitText from '../ui/SplitText';
 import { useGSAPFade, useGSAPStagger } from '../../hooks/useGSAP';
+import { useTranslation } from '../../hooks/useTranslation';
 import '../../styles/contact.css';
 
 interface FormState {
@@ -22,6 +23,9 @@ export default function Contact(): ReactElement {
     message: '',
   });
   const [status, setStatus] = useState<Status>('idle');
+
+  const { t } = useTranslation();
+  const c = t.contact;
 
   // GSAP Animations
   const leftRef = useGSAPFade('left', 0.1);
@@ -67,23 +71,19 @@ export default function Contact(): ReactElement {
 
       <section className="contact" id="contact">
         {/* Header */}
-        <p className="mono-label">Get In Touch</p>
+        <p className="mono-label">{c.tag}</p>
         <div className="section-heading">
-          <SplitText text="Let's" className="word-accent" staggerMs={55} />
-          <SplitText text=" Build" className="word-plain" staggerMs={55} delayMs={200} />
-          <SplitText text=" Together" className="word-plain" staggerMs={45} delayMs={400} />
+          <SplitText text={c.title1} className="word-accent" staggerMs={55} />
+          <SplitText text={c.title2} className="word-plain" staggerMs={55} delayMs={200} />
+          {c.title3 && (
+            <SplitText text={c.title3} className="word-plain" staggerMs={45} delayMs={400} />
+          )}
         </div>
 
         <div className="contact-grid">
           {/* Left: Info */}
           <div className="contact-info" ref={leftRef as React.RefObject<HTMLDivElement>}>
-            <p>
-              Have a project in mind? Looking for a reliable{' '}
-              <strong>full stack developer</strong>? I'm currently
-              available for <strong>freelance projects</strong> and{' '}
-              <strong>full-time opportunities</strong>.
-              Let's create something great.
-            </p>
+            <p>{c.desc}</p>
 
             <div className="contact-items" ref={linksRef as React.RefObject<HTMLDivElement>}>
               <a href="mailto:abate.shallo@gmail.com" className="contact-item">
@@ -130,20 +130,20 @@ export default function Contact(): ReactElement {
 
           {/* Right: Form */}
           <div className="contact-form-wrap" ref={rightRef as React.RefObject<HTMLDivElement>}>
-            <h3 className="form-title">Send a Message 👋</h3>
-            <p className="form-sub">I reply within 24 hours. Don't hesitate!</p>
+            <h3 className="form-title">{c.formTitle}</h3>
+            <p className="form-sub">{c.formSub}</p>
 
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-group">
                 <label className="form-label" htmlFor="name">
-                  // your name
+                  {c.nameLabel}
                 </label>
                 <input
                   id="name"
                   name="name"
                   type="text"
                   className="form-input"
-                  placeholder="Abebe Kebede"
+                  placeholder={c.namePlaceholder}
                   value={form.name}
                   onChange={handleChange}
                   required
@@ -152,14 +152,14 @@ export default function Contact(): ReactElement {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="email">
-                  // your email
+                  {c.emailLabel}
                 </label>
                 <input
                   id="email"
                   name="email"
                   type="email"
                   className="form-input"
-                  placeholder="abebe@example.com"
+                  placeholder={c.emailPlaceholder}
                   value={form.email}
                   onChange={handleChange}
                   required
@@ -168,13 +168,13 @@ export default function Contact(): ReactElement {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="message">
-                  // message
+                  {c.msgLabel}
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   className="form-textarea"
-                  placeholder="Hi Sadam, I have a project idea..."
+                  placeholder={c.msgPlaceholder}
                   value={form.message}
                   onChange={handleChange}
                   required
@@ -189,28 +189,25 @@ export default function Contact(): ReactElement {
                 {status === 'sending' ? (
                   <>
                     <Loader size={16} />
-                    Sending...
+                    {c.sending}
                   </>
                 ) : (
                   <>
                     <Send size={16} />
-                    Send Message
+                    {c.send}
                   </>
                 )}
               </button>
 
               {status === 'success' && (
                 <div className="form-success">
-                  ✅ Message sent! I'll reply within 24 hours.
+                  {c.success}
                 </div>
               )}
 
               {status === 'error' && (
                 <div className="form-error">
-                  ❌ Something went wrong. Please email me directly at{' '}
-                  <a href="mailto:abate.shallo@gmail.com">
-                    abate.shallo@gmail.com
-                  </a>
+                  {c.error}
                 </div>
               )}
             </form>

@@ -6,11 +6,14 @@ import { PROJECTS, PROJECT_FILTERS } from '../../data/projects';
 import type { Project, ProjectFilter } from '../../data/projects';
 import SplitText from '../ui/SplitText';
 import { useGSAPStagger } from '../../hooks/useGSAP';
+import { useTranslation } from '../../hooks/useTranslation';
 import '../../styles/projects.css';
 
 export default function Projects(): ReactElement {
   const [active, setActive] = useState<ProjectFilter>('All');
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const { t } = useTranslation();
+  const p = t.projects;
 
   // GSAP Stagger for project cards
   const gridRef = useGSAPStagger(0.1, 0, '.proj-card');
@@ -51,16 +54,12 @@ export default function Projects(): ReactElement {
 
       <section className="projects" id="projects">
         {/* Header */}
-        <p className="mono-label">Portfolio</p>
+        <p className="mono-label">{p.tag}</p>
         <div className="section-heading">
-          <SplitText text="Featured" className="word-accent" staggerMs={45} />
-          <SplitText text=" Projects" className="word-plain" staggerMs={45} delayMs={300} />
+          <SplitText text={p.title1} className="word-accent" staggerMs={45} />
+          <SplitText text={p.title2} className="word-plain" staggerMs={45} delayMs={300} />
         </div>
-        <p className="sec-sub">
-          Enterprise systems powering real banks.
-          <br />
-          Personal tools solving real problems. More on the way.
-        </p>
+        <p className="sec-sub">{p.sub}</p>
 
         {/* Filter tabs */}
         <div className="filter-row">
@@ -137,12 +136,12 @@ export default function Projects(): ReactElement {
                     className="proj-link"
                   >
                     <GithubIcon size={14} />
-                    GitHub
+                    {p.viewGithub}
                   </a>
                 ) : (
                   <span className="proj-link disabled">
                     <GithubIcon size={14} />
-                    Private
+                    {p.private}
                   </span>
                 )}
 

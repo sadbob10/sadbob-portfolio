@@ -3,25 +3,26 @@ import { EXPERIENCE } from '../../data/experience';
 import type { Experience as Exp } from '../../data/experience';
 import SplitText from '../ui/SplitText';
 import { useGSAPLineDraw, useGSAPStagger } from '../../hooks/useGSAP';
+import { useTranslation } from '../../hooks/useTranslation';
 import '../../styles/experience.css';
 
 export default function Experience(): ReactElement {
   const itemsRef = useGSAPStagger(0.15, 0.1, '.tl-item');
   const lineRef = useGSAPLineDraw();
+  const { t } = useTranslation();
+  const e = t.experience;
 
   return (
     <>
       <div className="sec-divider" />
       <section className="experience" id="experience">
 
-        <p className="mono-label">Career</p>
+        <p className="mono-label">{e.tag}</p>
         <div className="section-heading">
-          <SplitText text="My" className="word-accent" staggerMs={60} />
-          <SplitText text=" Experience" className="word-plain" staggerMs={50} delayMs={150} />
+          <SplitText text={e.title1} className="word-accent" staggerMs={60} />
+          <SplitText text={e.title2} className="word-plain" staggerMs={50} delayMs={150} />
         </div>
-        <p className="sec-sub">
-          Building real enterprise systems used by real people — from day one.
-        </p>
+        <p className="sec-sub">{e.sub}</p>
 
         <div
           className="timeline"
@@ -58,7 +59,7 @@ export default function Experience(): ReactElement {
                 <div className="tl-company">
                   {exp.company}
                   {exp.current && (
-                    <span className="tl-current-badge">● Now</span>
+                    <span className="tl-current-badge">{e.now}</span>
                   )}
                 </div>
 

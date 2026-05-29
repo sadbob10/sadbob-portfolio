@@ -3,7 +3,9 @@ import type { ReactElement } from 'react';
 import { Menu, X, Mail, Home } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import ThemeToggle from '../ui/ThemeToggle';
+import LanguageToggle from '../ui/LanguageToggle';
 import { useScramble } from '../../hooks/useScramble';
+import { useTranslation } from '../../hooks/useTranslation';
 import '../../styles/navbar.css';
 
 interface NavLink {
@@ -11,43 +13,20 @@ interface NavLink {
   id: string;
 }
 
-const LINKS: NavLink[] = [
-  { label: 'About', id: 'about' },
-  { label: 'Skills', id: 'skills' },
-  { label: 'Projects', id: 'projects' },
-  { label: 'Experience', id: 'experience' },
-  { label: 'Contact', id: 'contact' },
-];
-
-function ScrambleLink({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}): ReactElement {
-  const { text, scramble, reset } = useScramble(label);
-
-  return (
-    <span
-      className={`nav-link${active ? ' active' : ''}`}
-      onClick={onClick}
-      onMouseEnter={scramble}
-      onMouseLeave={reset}
-      role="button"
-      tabIndex={0}
-    >
-      {text}
-    </span>
-  );
-}
-
 export default function Navbar(): ReactElement {
+  const { t } = useTranslation();
+
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState('');
+
+  const LINKS: NavLink[] = [
+    { label: t.nav.about, id: 'about' },
+    { label: t.nav.skills, id: 'skills' },
+    { label: t.nav.projects, id: 'projects' },
+    { label: t.nav.experience, id: 'experience' },
+    { label: t.nav.contact, id: 'contact' },
+  ];
 
   // Scroll detection
   useEffect(() => {
@@ -73,7 +52,7 @@ export default function Navbar(): ReactElement {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [LINKS]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -130,11 +109,15 @@ export default function Navbar(): ReactElement {
             className="nav-cta"
             onClick={() => goTo('contact')}
           >
-            Hire Me
+            {t.nav.hire}
           </button>
 
           <span className="nav-theme-desktop">
             <ThemeToggle />
+          </span>
+
+          <span className="nav-theme-desktop">
+            <LanguageToggle />
           </span>
 
           <button
@@ -167,10 +150,13 @@ export default function Navbar(): ReactElement {
             zIndex: 10,
           }}
         >
-          {/* Theme Toggle - Left */}
-          <ThemeToggle />
+          {/* Theme & Language Toggle */}
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <ThemeToggle />
+            <LanguageToggle />
+          </div>
 
-          {/* Close Button - Right */}
+          {/* Close Button */}
           <button
             type="button"
             className="mobile-close"
@@ -223,7 +209,7 @@ export default function Navbar(): ReactElement {
             onClick={() => goTo('contact')}
             style={{ width: '100%', justifyContent: 'center' }}
           >
-            Hire Me
+            {t.nav.hire}
           </button>
 
           <div className="mobile-socials">

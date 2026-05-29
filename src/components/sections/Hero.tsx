@@ -5,30 +5,18 @@ import { Mail, ArrowRight, ChevronDown, Download } from 'lucide-react';
 import { useGlitch } from '../../hooks/useGlitch';
 import { useTyping } from '../../hooks/useTyping';
 import { useCountUp } from '../../hooks/useCountUp';
+import { useTranslation } from '../../hooks/useTranslation';
 
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 import ParallaxLayer from '../ui/ParallaxLayer';
 import ParticleScene from '../../lib/three/ParticleScene';
-import RippleButton    from '../ui/RippleButton'
-import MagneticButton  from '../ui/MagneticButton'
-import TextReveal from '../ui/TextReveal'
+import RippleButton from '../ui/RippleButton';
+import MagneticButton from '../ui/MagneticButton';
+import TextReveal from '../ui/TextReveal';
 
 import '../../styles/hero.css';
 
 const CV_URL = 'https://drive.google.com/uc?export=download&id=1D7aJmS9sViElkp5qz81a489JlX7lHGiC';
-
-interface StatItem {
-  value: string;
-  label: string;
-}
-
-// Static stats config (for reference)
-const STATS: StatItem[] = [
-  { value: '3+', label: 'Years Experience' },
-  { value: '5+', label: 'Projects Delivered' },
-  { value: '2', label: 'Banks Powered' },
-  { value: '∞', label: 'Lines of Code' },
-];
 
 function StatCounter({
   value,
@@ -53,11 +41,13 @@ function StatCounter({
 
 export default function Hero(): ReactElement {
   const [visible, setVisible] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const sadamGlitch = useGlitch('SADAM', 600);
   const abateGlitch = useGlitch('ABATE', 1100);
 
-  const role = useTyping();
+  // Use translated roles
+  const role = useTyping(t.hero.roles);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 80);
@@ -99,11 +89,11 @@ export default function Hero(): ReactElement {
         {/* Status Badge */}
         <div className="h-badge">
           <span className="h-dot" />
-          open to work — let's build something great
+          {t.hero.badge}
         </div>
 
         {/* Location */}
-        <p className="h-location">📍 Addis Ababa, Ethiopia · 🇪🇹</p>
+        <p className="h-location">{t.hero.location}</p>
 
         {/* Name — Glitch Decode with stroke effect */}
         <div className="name-block">
@@ -154,26 +144,24 @@ export default function Hero(): ReactElement {
 
         {/* Description */}
         <TextReveal
-          text="Building enterprise-grade systems that power Ethiopian banks and real businesses. Expert in React + Spring Boot full-stack development and React Native mobile apps."
+          text={t.hero.desc}
           className="h-desc"
           delay={0.3}
           stagger={0.04}
         />
 
-
         {/* CTA Buttons */}
         <div className="btn-row">
           <MagneticButton
             className="btn-primary"
-            onClick={() => document.getElementById('projects')
-              ?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
             style={{ overflow: 'visible' }}
           >
-            See My Work <ArrowRight size={15} />
+            {t.hero.seeWork} <ArrowRight size={15} />
           </MagneticButton>
 
           <RippleButton href="mailto:abate.shallo@gmail.com" className="btn-outline">
-            Let's Talk <Mail size={15} />
+            {t.hero.letsTalk} <Mail size={15} />
           </RippleButton>
 
           <a
@@ -186,7 +174,7 @@ export default function Hero(): ReactElement {
             }}
           >
             <Download size={15} />
-            Download CV
+            {t.hero.downloadCV}
           </a>
         </div>
 
@@ -223,10 +211,10 @@ export default function Hero(): ReactElement {
 
         {/* Animated Stats */}
         <div className="h-stats">
-          <StatCounter value={3} label="Years Experience" />
-          <StatCounter value={5} label="Projects Delivered" />
-          <StatCounter value={2} label="Banks Powered" />
-          <StatCounter value={0} label="Lines of Code" isInfinity />
+          <StatCounter value={3} label={t.hero.stats.years} />
+          <StatCounter value={5} label={t.hero.stats.projects} />
+          <StatCounter value={2} label={t.hero.stats.banks} />
+          <StatCounter value={0} label={t.hero.stats.code} isInfinity />
         </div>
       </div>
 

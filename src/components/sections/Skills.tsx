@@ -5,9 +5,12 @@ import type { Skill, SkillCategory } from '../../data/skills';
 import '../../styles/skills.css';
 import SplitText from '../ui/SplitText';
 import { useGSAPStagger } from '../../hooks/useGSAP';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Skills(): ReactElement {
   const [active, setActive] = useState<SkillCategory>('All');
+  const { t } = useTranslation();
+  const s = t.skills;
 
   // GSAP Stagger for skills grid
   const gridRef = useGSAPStagger(0.06, 0.1);
@@ -23,20 +26,17 @@ export default function Skills(): ReactElement {
 
       <section className="skills" id="skills">
         {/* Header */}
-        <p className="mono-label">Tech Arsenal</p>
+        <p className="mono-label">{s.tag}</p>
 
         {/* Updated SplitText Title */}
         <div className="section-heading">
-          <SplitText text="What" className="word-accent" staggerMs={50} />
-          <SplitText text=" I" className="word-plain" staggerMs={50} delayMs={150} />
-          <SplitText text=" Work" className="word-plain" staggerMs={50} delayMs={250} />
-          <SplitText text=" With" className="word-plain" staggerMs={50} delayMs={350} />
+          <SplitText text={s.title1} className="word-accent" staggerMs={50} />
+          <SplitText text={s.title2} className="word-plain" staggerMs={50} delayMs={150} />
+          <SplitText text={s.title3} className="word-plain" staggerMs={50} delayMs={250} />
+          <SplitText text={s.title4} className="word-plain" staggerMs={50} delayMs={350} />
         </div>
 
-        <p className="sec-sub">
-          From Java backends to React frontends, mobile apps to databases —
-          my toolkit spans the complete modern stack.
-        </p>
+        <p className="sec-sub">{s.sub}</p>
 
         {/* Filter tabs */}
         <div className="filter-row">
