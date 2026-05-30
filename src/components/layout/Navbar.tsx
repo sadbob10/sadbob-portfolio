@@ -13,6 +13,31 @@ interface NavLink {
   id: string;
 }
 
+function ScrambleLink({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}): ReactElement {
+  const { text, scramble, reset } = useScramble(label);
+
+  return (
+    <span
+      className={`nav-link${active ? ' active' : ''}`}
+      onClick={onClick}
+      onMouseEnter={scramble}
+      onMouseLeave={reset}
+      role="button"
+      tabIndex={0}
+    >
+      {text}
+    </span>
+  );
+}
+
 export default function Navbar(): ReactElement {
   const { t } = useTranslation();
 
