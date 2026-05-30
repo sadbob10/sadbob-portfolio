@@ -1,219 +1,184 @@
-import { useState } from 'react';
-import type { ReactElement, FormEvent } from 'react';
-import emailjs from '@emailjs/browser';
-import { Mail, Send, Loader } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from '../ui/Icons';
-import SplitText from '../ui/SplitText';
-import { useGSAPFade, useGSAPStagger } from '../../hooks/useGSAP';
-import { useTranslation } from '../../hooks/useTranslation';
-import '../../styles/contact.css';
+import { useState, useRef, useEffect } from 'react'
+import type { ReactElement, KeyboardEvent } from 'react'
+import { Send, X, Sparkles } from 'lucide-react'
+import { useTranslation } from '../../hooks/useTranslation'
+import '../../styles/chat.css'
 
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
+interface Message {
+  role:    'user' | 'assistant'
+  content: string
 }
 
-type Status = 'idle' | 'sending' | 'success' | 'error';
+export default function AIChatAssistant(): ReactElement {
+  const { t }    = useTranslation()
+  const chat     = t.chat
 
-export default function Contact(): ReactElement {
-  const [form, setForm] = useState<FormState>({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [status, setStatus] = useState<Status>('idle');
+  const [open,      setOpen]      = useState(false)
+  const [messages,  setMessages]  = useState<Message[]>([])
+  const [input,     setInput]     = useState('')
+  const [loading,   setLoading]   = useState(false)
+  const [showBadge, setShowBadge] = useState(true)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const inputRef  = useRef<HTMLTextAreaElement>(null)
 
-  const { t } = useTranslation();
-  const c = t.contact;
+  // Update welcome message when language changes
+  useEffect(() => {
+    setMessages([{ role: 'assistant', content: chat.welcome }])
+  }, [chat.welcome])
 
-  // GSAP Animations
-  const leftRef = useGSAPFade('left', 0.1);
-  const rightRef = useGSAPFade('right', 0.2);
-  const linksRef = useGSAPStagger(0.12, 0.2);
+  // Auto-scroll
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading])
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  // Focus input on open
+  useEffect(() => {
+    if (open) {
+      setShowBadge(false)
+      setTimeout(() => inputRef.current?.focus(), 300)
+    }
+  }, [open])
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setStatus('sending');
+  const send = async (text: string): Promise<void> => {
+    const msg = text.trim()
+    if (!msg || loading) return
+
+    const userMsg: Message      = { role: 'user', content: msg }
+    const newMessages: Message[] = [...messages, userMsg]
+    setMessages(newMessages)
+    setInput('')
+    setLoading(true)
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID as string,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string,
-        {
-          from_name: form.name,
-          from_email: form.email,
-          message: form.message,
-          to_name: 'Sadam',
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string
-      );
-
-      setStatus('success');
-      setForm({ name: '', email: '', message: '' });
-
-      setTimeout(() => setStatus('idle'), 5000);
+      const res = await fetch('/api/chat', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: newMessages.map((m) => ({
+            role:    m.role,
+            content: m.content,
+          })),
+        }),
+      })
+      const data = await res.json()
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.content ?? 'Sorry, something went wrong.' },
+      ])
     } catch {
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 6000);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: 'Connection error. Email abate.shallo@gmail.com 📧' },
+      ])
+    } finally {
+      setLoading(false)
     }
-  };
+  }
+
+  const onKey = (e: KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      send(input)
+    }
+  }
 
   return (
     <>
-      <div className="sec-divider" />
+      {/* Chat Panel */}
+      <div className={`chat-panel${open ? ' open' : ''}`} role="dialog">
 
-      <section className="contact" id="contact">
         {/* Header */}
-        <p className="mono-label">{c.tag}</p>
-        <div className="section-heading">
-          <SplitText text={c.title1} className="word-accent" staggerMs={55} />
-          <SplitText text={c.title2} className="word-plain" staggerMs={55} delayMs={200} />
-          {c.title3 && (
-            <SplitText text={c.title3} className="word-plain" staggerMs={45} delayMs={400} />
-          )}
-        </div>
-
-        <div className="contact-grid">
-          {/* Left: Info */}
-          <div className="contact-info" ref={leftRef as React.RefObject<HTMLDivElement>}>
-            <p>{c.desc}</p>
-
-            <div className="contact-items" ref={linksRef as React.RefObject<HTMLDivElement>}>
-              <a href="mailto:abate.shallo@gmail.com" className="contact-item">
-                <div className="ci-icon">
-                  <Mail size={17} />
-                </div>
-                <div>
-                  <div className="ci-label">// email</div>
-                  <div className="ci-value">abate.shallo@gmail.com</div>
-                </div>
-              </a>
-
-              <a
-                href="https://github.com/sadbob10"
-                target="_blank"
-                rel="noreferrer"
-                className="contact-item"
-              >
-                <div className="ci-icon">
-                  <GithubIcon size={17} />
-                </div>
-                <div>
-                  <div className="ci-label">// github</div>
-                  <div className="ci-value">github.com/sadbob10</div>
-                </div>
-              </a>
-
-              <a
-                href="https://www.linkedin.com/in/sadam-abate"
-                target="_blank"
-                rel="noreferrer"
-                className="contact-item"
-              >
-                <div className="ci-icon">
-                  <LinkedinIcon size={17} />
-                </div>
-                <div>
-                  <div className="ci-label">// linkedin</div>
-                  <div className="ci-value">linkedin.com/in/sadam-abate</div>
-                </div>
-              </a>
+        <div className="chat-head">
+          <div className="chat-head-avatar">🤖</div>
+          <div className="chat-head-info">
+            <div className="chat-head-name">{chat.title}</div>
+            <div className="chat-head-status">
+              <span className="chat-status-dot" />
+              {chat.status}
             </div>
           </div>
-
-          {/* Right: Form */}
-          <div className="contact-form-wrap" ref={rightRef as React.RefObject<HTMLDivElement>}>
-            <h3 className="form-title">{c.formTitle}</h3>
-            <p className="form-sub">{c.formSub}</p>
-
-            <form onSubmit={handleSubmit} noValidate>
-              <div className="form-group">
-                <label className="form-label" htmlFor="name">
-                  {c.nameLabel}
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  className="form-input"
-                  placeholder={c.namePlaceholder}
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="email">
-                  {c.emailLabel}
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="form-input"
-                  placeholder={c.emailPlaceholder}
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="message">
-                  {c.msgLabel}
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  className="form-textarea"
-                  placeholder={c.msgPlaceholder}
-                  value={form.message}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="form-submit"
-                disabled={status === 'sending'}
-              >
-                {status === 'sending' ? (
-                  <>
-                    <Loader size={16} />
-                    {c.sending}
-                  </>
-                ) : (
-                  <>
-                    <Send size={16} />
-                    {c.send}
-                  </>
-                )}
-              </button>
-
-              {status === 'success' && (
-                <div className="form-success">
-                  {c.success}
-                </div>
-              )}
-
-              {status === 'error' && (
-                <div className="form-error">
-                  {c.error}
-                </div>
-              )}
-            </form>
-          </div>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            style={{ background:'none', border:'none', color:'var(--muted)', cursor:'pointer' }}
+          >
+            <X size={18} />
+          </button>
         </div>
-      </section>
+
+        {/* Quick suggestions */}
+        {messages.length <= 1 && (
+          <div className="chat-suggestions">
+            {chat.suggestions.map((s) => (
+              <button
+                key={s}
+                type="button"
+                className="chat-suggestion"
+                onClick={() => send(s)}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Messages */}
+        <div className="chat-messages">
+          {messages.map((msg, i) => (
+            <div key={i} className={`chat-msg ${msg.role === 'user' ? 'user' : 'ai'}`}>
+              <div className="chat-msg-avatar">
+                {msg.role === 'assistant' ? '🤖' : '👤'}
+              </div>
+              <div className="chat-msg-text">{msg.content}</div>
+            </div>
+          ))}
+
+          {loading && (
+            <div className="chat-msg ai">
+              <div className="chat-msg-avatar">🤖</div>
+              <div className="chat-typing">
+                <span /><span /><span />
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Input */}
+        <div className="chat-input-wrap">
+          <textarea
+            ref={inputRef}
+            className="chat-input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKey}
+            placeholder={chat.placeholder}
+            rows={1}
+            disabled={loading}
+          />
+          <button
+            type="button"
+            className="chat-send"
+            onClick={() => send(input)}
+            disabled={!input.trim() || loading}
+          >
+            <Send size={15} />
+          </button>
+        </div>
+
+      </div>
+
+      {/* Floating Bubble */}
+      <button
+        type="button"
+        className={`chat-bubble${open ? ' open' : ''}`}
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Open AI chat"
+      >
+        {showBadge && <span className="chat-badge">1</span>}
+        {open ? <X size={20} /> : <Sparkles size={20} />}
+      </button>
     </>
-  );
+  )
 }
